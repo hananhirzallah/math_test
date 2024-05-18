@@ -77,17 +77,17 @@ def main():
         st.session_state.start_time = None
     if 'feedback' not in st.session_state:
         st.session_state.feedback = None
-    if 'user_answer' not in st.session_state:
-        st.session_state.user_answer = ""
     
     # Request number of questions if not already set
     if st.session_state.num_questions == 0:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
+        st.session_state.user_answer = ""  # Reset user answer to empty string when setting number of questions
         return  # Stop execution here until the user sets the number of questions
     
     if st.session_state.current_question is None:
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
+        st.session_state.user_answer = ""  # Reset user answer for new question
     
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
@@ -136,7 +136,7 @@ def main():
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
             st.session_state.start_time = time.time()
-            st.session_state.user_answer = ""  # Reset user answer
+            st.session_state.user_answer = ""  # Reset user answer for next question
             st.experimental_rerun()
 
     if st.session_state.feedback:
@@ -145,4 +145,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
