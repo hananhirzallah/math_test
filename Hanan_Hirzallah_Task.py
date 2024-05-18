@@ -28,7 +28,7 @@ def generate_arithmetic_question(difficulty):
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
-        hint = f"Think about dividing {a} by {b}."
+        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
@@ -77,6 +77,8 @@ def main():
         st.session_state.start_time = None
     if 'feedback' not in st.session_state:
         st.session_state.feedback = None
+    if 'user_answer' not in st.session_state:
+        st.session_state.user_answer = 0.0
     
     # Request number of questions if not already set
     if st.session_state.num_questions == 0:
@@ -90,7 +92,7 @@ def main():
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
     
-    user_answer = st.number_input('Your answer:', format="%.1f", step=0.1)
+    user_answer = st.number_input('Your answer:', format="%.1f", step=0.1, value=st.session_state.user_answer, key='user_answer_input')
     
     if st.button('Submit'):
         end_time = time.time()
@@ -126,6 +128,7 @@ def main():
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
             st.session_state.start_time = time.time()
+            st.session_state.user_answer = 0.0  # Reset user answer
             st.experimental_rerun()
 
     if st.session_state.feedback:
@@ -134,5 +137,4 @@ def main():
     
 if __name__ == "__main__":
     main()
-
 
