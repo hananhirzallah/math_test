@@ -60,15 +60,23 @@ def adjust_difficulty(current_difficulty, correct):
 def main():
     st.title("Math Test!")
     
+    # Initialize session state variables if not already done
     if 'num_questions' not in st.session_state:
         st.session_state.num_questions = 0
+    if 'current_difficulty' not in st.session_state:
         st.session_state.current_difficulty = 1
+    if 'score' not in st.session_state:
         st.session_state.score = 0
+    if 'question_number' not in st.session_state:
         st.session_state.question_number = 0
+    if 'answers' not in st.session_state:
         st.session_state.answers = []
+    if 'current_question' not in st.session_state:
         st.session_state.current_question = None
+    if 'start_time' not in st.session_state:
         st.session_state.start_time = None
-        st.session_state.feedback = None  # Initialize the feedback key
+    if 'feedback' not in st.session_state:
+        st.session_state.feedback = None
     
     if st.session_state.num_questions == 0:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
