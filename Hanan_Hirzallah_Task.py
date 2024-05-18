@@ -68,10 +68,10 @@ def main():
     if 'start_new_quiz' not in st.session_state:
         st.session_state.start_new_quiz = False
 
-    if st.button('Start New Quiz', key='start_quiz_button'):
-        reset_quiz()
-        st.session_state.start_new_quiz = True
-        st.experimental_rerun()
+    # if st.button('Start New Quiz', key='start_quiz_button'):
+    #     reset_quiz()
+    #     st.session_state.start_new_quiz = True
+    #     st.experimental_rerun()
     
     # Initialize session state variables if not already done
     if 'num_questions' not in st.session_state:
@@ -138,8 +138,9 @@ def main():
             st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
             st.write(f"Total Time: {performance['total_time']}")
             
-            if st.button('Start New Quiz', key='start_new_quiz_button'):
+            if if st.button('Start New Quiz', key='start_quiz_button'):
                 reset_quiz()
+                st.session_state.start_new_quiz = True
                 st.experimental_rerun()
             return  # Stop execution after the last question
         else:
