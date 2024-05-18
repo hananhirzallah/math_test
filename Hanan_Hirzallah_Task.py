@@ -138,7 +138,7 @@ def main():
             st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
             st.write(f"Total Time: {performance['total_time']}")
             
-            if if st.button('Start New Quiz', key='start_quiz_button'):
+            if st.button('Start New Quiz', key='start_quiz_button'):
                 reset_quiz()
                 st.session_state.start_new_quiz = True
                 st.experimental_rerun()
