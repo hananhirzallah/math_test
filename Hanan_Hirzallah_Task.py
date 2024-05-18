@@ -3,7 +3,7 @@ import random
 import time
 import streamlit as st
 
-# Function to generate arithmetic questions
+# Function to generate arithmetic questions with specific hints
 def generate_arithmetic_question(difficulty):
     if difficulty == 1:  # easy
         a, b = random.randint(1, 10), random.randint(1, 10)
@@ -16,17 +16,21 @@ def generate_arithmetic_question(difficulty):
     if operation == '+':
         question = f"{a} + {b}"
         answer = a + b
+        hint = f"Think about adding {a} and {b} together."
     elif operation == '-':
         question = f"{a} - {b}"
         answer = a - b
+        hint = f"Think about subtracting {b} from {a}."
     elif operation == '*':
         question = f"{a} * {b}"
         answer = a * b
+        hint = f"Think about multiplying {a} and {b}."
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
+        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
     
-    return {"question": question, "answer": answer, "difficulty": difficulty}
+    return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
 # Function to evaluate performance
 def evaluate_performance(answers):
@@ -87,6 +91,8 @@ def main():
             st.write("Correct!")
         else:
             st.write("Wrong Answer!")
+            st.write(f"Hint: {question['hint']}")
+            st.write(f"The correct answer was: {question['answer']}")
         
         st.session_state.answers.append({
             'question': question['question'],
@@ -111,3 +117,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
