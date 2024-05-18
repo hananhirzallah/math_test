@@ -77,8 +77,6 @@ def main():
         st.session_state.start_time = None
     if 'feedback' not in st.session_state:
         st.session_state.feedback = None
-    if 'user_answer' not in st.session_state:
-        st.session_state.user_answer = 0.0
     
     # Request number of questions if not already set
     if st.session_state.num_questions == 0:
@@ -88,15 +86,23 @@ def main():
     if st.session_state.current_question is None:
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
+        st.session_state.user_answer = ""  # Initialize user answer
     
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
     
-    user_answer = st.number_input('Your answer:', format="%.1f", step=0.1, value=st.session_state.user_answer, key='user_answer_input')
+    user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key='user_answer_input')
     
     if st.button('Submit'):
         end_time = time.time()
         time_taken = end_time - st.session_state.start_time
+
+        try:
+            user_answer = float(user_answer)
+        except ValueError:
+            st.session_state.feedback = "Please enter a valid number."
+            st.experimental_rerun()
+            return
         
         correct = round(user_answer, 1) == question['answer']
         if correct:
@@ -125,10 +131,11 @@ def main():
             col1.metric("Correct Answers", performance["correct_answers"])
             col2.metric("Average Difficulty", round(performance["average_difficulty"], 2))
             col3.metric("Total Time", performance["total_time"])
+            return  # Stop execution after the last question
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
             st.session_state.start_time = time.time()
-            st.session_state.user_answer = 0.0  # Reset user answer
+            st.session_state.user_answer = ""  # Reset user answer
             st.experimental_rerun()
 
     if st.session_state.feedback:
