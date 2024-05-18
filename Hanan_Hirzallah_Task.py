@@ -58,10 +58,16 @@ def adjust_difficulty(current_difficulty, correct):
 
 # Function to reset the quiz state
 def reset_quiz():
-    keys_to_clear = ['num_questions', 'current_difficulty', 'score', 'question_number', 'answers', 'current_question', 'start_time', 'feedback', 'user_answer']
-    for key in keys_to_clear:
-        if key in st.session_state:
-            del st.session_state[key]
+    st.session_state.clear()
+    st.session_state.num_questions = None
+    st.session_state.current_difficulty = 1
+    st.session_state.score = 0
+    st.session_state.question_number = 0
+    st.session_state.answers = []
+    st.session_state.current_question = None
+    st.session_state.start_time = None
+    st.session_state.feedback = None
+    st.session_state.user_answer = ""
 
 # Main function to run the Streamlit app
 def main():
