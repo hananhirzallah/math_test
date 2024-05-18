@@ -9,7 +9,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(100, 1000)
+        a, b = random.randint(100, 1000), random.randint(1000, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -35,7 +35,8 @@ def generate_arithmetic_question(difficulty):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = round(sum(ans['time_taken'] for ans in answers), 1) # Round total time to one decimal place
+    total_time = sum(ans['time_taken'] for ans in answers)
+    total_time = round(total_time, 1)  # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
@@ -84,7 +85,9 @@ def main():
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
-        st.stop()  # Stop execution here until the user sets the number of questions
+        if st.button('Confirm'):
+            st.experimental_rerun()
+        st.stop()  # Stop execution here until the user confirms the number of questions
 
     # Check if the quiz is complete
     if st.session_state.question_number >= st.session_state.num_questions:
@@ -153,6 +156,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
