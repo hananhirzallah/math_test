@@ -36,7 +36,8 @@ def generate_arithmetic_question(difficulty):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = round(sum(ans['time_taken'] for ans in answers), 1)  # Round total time to one decimal place
+    total_time = sum(ans['time_taken'] for ans in answers)
+    total_time = round(total_time, 1)  # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
@@ -87,12 +88,11 @@ def main():
     if st.session_state.current_question is None:
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
-        st.session_state.user_answer = ""  # Initialize user answer
     
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
     
-    user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key='user_answer_input')
+    user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
     
     if st.button('Submit'):
         end_time = time.time()
@@ -145,3 +145,4 @@ def main():
     
 if __name__ == "__main__":
     main()
+
