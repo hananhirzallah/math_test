@@ -78,8 +78,10 @@ def main():
     if 'feedback' not in st.session_state:
         st.session_state.feedback = None
     
+    # Request number of questions if not already set
     if st.session_state.num_questions == 0:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
+        return  # Stop execution here until the user sets the number of questions
     
     if st.session_state.current_question is None:
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
@@ -128,4 +130,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
