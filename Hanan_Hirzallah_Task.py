@@ -83,7 +83,7 @@ def main():
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
-        st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=10)
+        st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
         st.stop()  # Stop execution here until the user sets the number of questions
 
     # Check if the quiz is complete
