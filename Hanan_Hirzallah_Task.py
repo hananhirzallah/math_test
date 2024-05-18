@@ -84,8 +84,9 @@ def main():
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
-        st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
+        num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1, value=10)
         if st.button('Confirm'):
+            st.session_state.num_questions = num_questions
             st.experimental_rerun()
         st.stop()  # Stop execution here until the user confirms the number of questions
 
@@ -156,6 +157,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
