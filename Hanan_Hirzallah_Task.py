@@ -1,4 +1,3 @@
-# Hanan Hirzallah Math Test
 import random
 import time
 import streamlit as st
@@ -10,7 +9,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(1000, 1000)
+        a, b = random.randint(100, 1000), random.randint(100, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -36,8 +35,7 @@ def generate_arithmetic_question(difficulty):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = sum(ans['time_taken'] for ans in answers)
-    total_time = round(total_time, 1)  # Round total time to one decimal place
+    total_time = round(sum(ans['time_taken'] for ans in answers), 1) # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
@@ -55,6 +53,17 @@ def adjust_difficulty(current_difficulty, correct):
         return min(3, current_difficulty + 1)  # Increase difficulty if correct
     else:
         return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
+
+# Function to reset the quiz state
+def reset_quiz():
+    keys_to_clear = [
+        'num_questions', 'current_difficulty', 'score', 'question_number', 'answers',
+        'current_question', 'start_time', 'feedback', 'user_answer'
+    ]
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.experimental_rerun()
 
 # Main function to run the Streamlit app
 def main():
@@ -86,6 +95,8 @@ def main():
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
         st.write(f"Total Time: {performance['total_time']}")
+        if st.button('Start New Quiz', key='start_new_quiz_button'):
+            reset_quiz()
         return  # Stop execution after the last question
 
     if st.session_state.current_question is None:
