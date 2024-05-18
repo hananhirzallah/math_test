@@ -65,8 +65,12 @@ def reset_quiz():
 def main():
     st.title("Math Test!")
 
-    if st.button('Start New Quiz'):
+    if 'start_new_quiz' not in st.session_state:
+        st.session_state.start_new_quiz = False
+
+    if st.button('Start New Quiz', key='start_quiz_button'):
         reset_quiz()
+        st.session_state.start_new_quiz = True
         st.experimental_rerun()
     
     # Initialize session state variables if not already done
@@ -96,7 +100,7 @@ def main():
     
     user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
     
-    if st.button('Submit'):
+    if st.button('Submit', key='submit_button'):
         end_time = time.time()
         time_taken = end_time - st.session_state.start_time
 
@@ -134,7 +138,7 @@ def main():
             st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
             st.write(f"Total Time: {performance['total_time']}")
             
-            if st.button('Start New Quiz'):
+            if st.button('Start New Quiz', key='start_new_quiz_button'):
                 reset_quiz()
                 st.experimental_rerun()
             return  # Stop execution after the last question
