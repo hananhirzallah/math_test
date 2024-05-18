@@ -36,8 +36,7 @@ def generate_arithmetic_question(difficulty):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = sum(ans['time_taken'] for ans in answers)
-    total_time = round(total_time, 1)  # Round total time to one decimal place
+    total_time = round(sum(ans['time_taken'] for ans in answers), 1)  # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
@@ -77,6 +76,8 @@ def main():
         st.session_state.start_time = None
     if 'feedback' not in st.session_state:
         st.session_state.feedback = None
+    if 'user_answer' not in st.session_state:
+        st.session_state.user_answer = ""
     
     # Request number of questions if not already set
     if st.session_state.num_questions == 0:
@@ -144,4 +145,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-
