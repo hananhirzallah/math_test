@@ -28,7 +28,7 @@ def generate_arithmetic_question(difficulty):
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
-        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
+        hint = f"Think about dividing {a} by {b}."
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
