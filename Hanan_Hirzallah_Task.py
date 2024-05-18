@@ -28,7 +28,7 @@ def generate_arithmetic_question(difficulty):
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
-        hint = f"Think about dividing {a} by {b}."
+        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
@@ -56,27 +56,25 @@ def adjust_difficulty(current_difficulty, correct):
     else:
         return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
 
+# Function to reset the quiz state
+def reset_quiz():
+    st.session_state.num_questions = 0
+    st.session_state.current_difficulty = 1
+    st.session_state.score = 0
+    st.session_state.question_number = 0
+    st.session_state.answers = []
+    st.session_state.current_question = None
+    st.session_state.start_time = None
+    st.session_state.feedback = None
+    st.session_state.user_answer = ""
+
 # Main function to run the Streamlit app
 def main():
     st.title("Math Test!")
     
     # Initialize session state variables if not already done
     if 'num_questions' not in st.session_state:
-        st.session_state.num_questions = 0
-    if 'current_difficulty' not in st.session_state:
-        st.session_state.current_difficulty = 1
-    if 'score' not in st.session_state:
-        st.session_state.score = 0
-    if 'question_number' not in st.session_state:
-        st.session_state.question_number = 0
-    if 'answers' not in st.session_state:
-        st.session_state.answers = []
-    if 'current_question' not in st.session_state:
-        st.session_state.current_question = None
-    if 'start_time' not in st.session_state:
-        st.session_state.start_time = None
-    if 'feedback' not in st.session_state:
-        st.session_state.feedback = None
+        reset_quiz()
     
     # Request number of questions if not already set
     if st.session_state.num_questions == 0:
@@ -128,10 +126,13 @@ def main():
             st.write("Test completed!")
             st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
             st.write("## Performance Summary")
-            col1, col2, col3 = st.columns(3)
-            col1.metric("Correct Answers", performance["correct_answers"])
-            col2.metric("Average Difficulty", round(performance["average_difficulty"], 2))
-            col3.metric("Total Time", performance["total_time"])
+            st.write(f"Correct Answers: {performance['correct_answers']}")
+            st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
+            st.write(f"Total Time: {performance['total_time']}")
+            
+            if st.button('Start New Quiz'):
+                reset_quiz()
+                st.experimental_rerun()
             return  # Stop execution after the last question
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
@@ -145,5 +146,4 @@ def main():
     
 if __name__ == "__main__":
     main()
-
 
