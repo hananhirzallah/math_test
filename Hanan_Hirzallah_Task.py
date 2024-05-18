@@ -10,7 +10,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(100, 1000)
+        a, b = random.randint(100, 1000), random.randint(1000, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -56,23 +56,10 @@ def adjust_difficulty(current_difficulty, correct):
     else:
         return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
 
-# Function to reset the quiz state
-def reset_quiz():
-    for key in st.session_state.keys():
-        del st.session_state[key]
-
 # Main function to run the Streamlit app
 def main():
     st.title("Math Test!")
 
-    if 'start_new_quiz' not in st.session_state:
-        st.session_state.start_new_quiz = False
-
-    # if st.button('Start New Quiz', key='start_quiz_button'):
-    #     reset_quiz()
-    #     st.session_state.start_new_quiz = True
-    #     st.experimental_rerun()
-    
     # Initialize session state variables if not already done
     if 'num_questions' not in st.session_state:
         st.session_state.num_questions = None
@@ -84,23 +71,37 @@ def main():
         st.session_state.start_time = None
         st.session_state.feedback = None
         st.session_state.user_answer = ""
-    
+
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
         st.stop()  # Stop execution here until the user sets the number of questions
-    
+
+    # Check if the quiz is complete
+    if st.session_state.question_number >= st.session_state.num_questions:
+        performance = evaluate_performance(st.session_state.answers)
+        st.write("Test completed!")
+        st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
+        st.write("## Performance Summary")
+        st.write(f"Correct Answers: {performance['correct_answers']}")
+        st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
+        st.write(f"Total Time: {performance['total_time']}")
+        return  # Stop execution after the last question
+
     if st.session_state.current_question is None:
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
         st.session_state.user_answer = ""  # Reset user answer for new question
-    
+
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
-    
+
     user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
-    
+
     if st.button('Submit', key='submit_button'):
+        if st.session_state.question_number >= st.session_state.num_questions:
+            return  # Stop if quiz is complete
+
         end_time = time.time()
         time_taken = end_time - st.session_state.start_time
 
@@ -110,14 +111,14 @@ def main():
             st.session_state.feedback = "Please enter a valid number."
             st.experimental_rerun()
             return
-        
+
         correct = round(user_answer, 1) == question['answer']
         if correct:
             st.session_state.score += 1
             st.session_state.feedback = "Correct!"
         else:
             st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
-        
+
         st.session_state.answers.append({
             'question': question['question'],
             'answer': user_answer,
@@ -125,36 +126,23 @@ def main():
             'difficulty': st.session_state.current_difficulty,
             'time_taken': time_taken
         })
-        
+
         st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
         st.session_state.question_number += 1
-        
-        if st.session_state.question_number >= st.session_state.num_questions:
-            performance = evaluate_performance(st.session_state.answers)
-            st.write("Test completed!")
-            st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
-            st.write("## Performance Summary")
-            st.write(f"Correct Answers: {performance['correct_answers']}")
-            st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
-            st.write(f"Total Time: {performance['total_time']}")
-            
-            if st.button('Start New Quiz', key='start_quiz_button'):
-                reset_quiz()
-                st.session_state.start_new_quiz = True
-                st.experimental_rerun()
-            return  # Stop execution after the last question
-        else:
-            st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
-            st.session_state.start_time = time.time()
-            st.session_state.user_answer = ""  # Reset user answer for next question
-            st.experimental_rerun()
+
+        # Reset for the next question
+        st.session_state.current_question = None
+        st.session_state.start_time = time.time()
+        st.session_state.user_answer = ""  # Reset user answer for next question
+        st.experimental_rerun()
 
     if st.session_state.feedback:
         st.write(st.session_state.feedback)
         st.session_state.feedback = None
-    
+
 if __name__ == "__main__":
     main()
+
 
 
 
