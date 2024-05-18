@@ -118,7 +118,11 @@ def main():
             performance = evaluate_performance(st.session_state.answers)
             st.write("Test completed!")
             st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
-            st.write(f"Performance: {performance}")
+            st.write("## Performance Summary")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Correct Answers", performance["correct_answers"])
+            col2.metric("Average Difficulty", round(performance["average_difficulty"], 2))
+            col3.metric("Total Time", performance["total_time"])
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
             st.session_state.start_time = time.time()
