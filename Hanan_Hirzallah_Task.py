@@ -15,7 +15,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(1000, 1000)
+        a, b = random.randint(100, 1000), random.randint(100, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -39,7 +39,7 @@ def generate_arithmetic_question(difficulty):
 
 # Function to generate feedback using NLP
 def generate_feedback(question, user_answer, correct_answer):
-    feedback_prompt = f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Here's why."
+    feedback_prompt = f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Explain why."
     feedback = nlp(feedback_prompt, max_length=50, num_return_sequences=1)[0]['generated_text']
     return feedback
 
@@ -47,8 +47,7 @@ def generate_feedback(question, user_answer, correct_answer):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = sum(ans['time_taken'] for ans in answers)
-    total_time = round(total_time, 1)  # Round total time to one decimal place
+    total_time = round(sum(ans['time_taken'] for ans in answers), 1) # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
