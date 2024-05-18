@@ -58,7 +58,10 @@ def adjust_difficulty(current_difficulty, correct):
 
 # Function to reset the quiz state
 def reset_quiz():
-    st.session_state.clear()
+    keys_to_clear = ['num_questions', 'current_difficulty', 'score', 'question_number', 'answers', 'current_question', 'start_time', 'feedback', 'user_answer']
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
 
 # Main function to run the Streamlit app
 def main():
@@ -66,7 +69,7 @@ def main():
     
     # Initialize session state variables if not already done
     if 'num_questions' not in st.session_state:
-        st.session_state.num_questions = 0
+        st.session_state.num_questions = None
         st.session_state.current_difficulty = 1
         st.session_state.score = 0
         st.session_state.question_number = 0
@@ -77,7 +80,7 @@ def main():
         st.session_state.user_answer = ""
     
     # Request number of questions if not already set
-    if st.session_state.num_questions == 0:
+    if st.session_state.num_questions is None:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
         st.session_state.user_answer = ""  # Reset user answer to empty string when setting number of questions
         return  # Stop execution here until the user sets the number of questions
