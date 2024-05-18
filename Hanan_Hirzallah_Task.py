@@ -54,7 +54,7 @@ def adjust_difficulty(current_difficulty, correct):
 
 # Main function to run the Streamlit app
 def main():
-    st.title("AI-Based Adaptive Math Test")
+    st.title("Math Test!")
     
     if 'num_questions' not in st.session_state:
         st.session_state.num_questions = 0
