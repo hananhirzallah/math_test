@@ -68,6 +68,7 @@ def main():
         st.session_state.answers = []
         st.session_state.current_question = None
         st.session_state.start_time = None
+        st.session_state.feedback = None
     
     if st.session_state.num_questions == 0:
         st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
@@ -88,11 +89,9 @@ def main():
         correct = round(user_answer, 1) == question['answer']
         if correct:
             st.session_state.score += 1
-            st.write("Correct!")
+            st.session_state.feedback = "Correct!"
         else:
-            st.write("Wrong Answer!")
-            st.write(f"Hint: {question['hint']}")
-            st.write(f"The correct answer was: {question['answer']}")
+            st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
         
         st.session_state.answers.append({
             'question': question['question'],
@@ -113,8 +112,15 @@ def main():
         else:
             st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
             st.session_state.start_time = time.time()
-            st.experimental_rerun()
+    
+    if st.session_state.feedback:
+        st.write(st.session_state.feedback)
+        st.session_state.feedback = None
+    
+    if st.session_state.question_number > 0 and st.session_state.question_number < st.session_state.num_questions:
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
+
 
