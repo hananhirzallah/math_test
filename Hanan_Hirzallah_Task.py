@@ -2,6 +2,50 @@ import random
 import time
 import streamlit as st
 
+# Set the color styles using Streamlit's markdown feature with HTML and CSS
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f0f2f6;
+    }
+    .stButton>button {
+        color: #ffffff;
+        background-color: #4CAF50;
+        border-radius: 5px;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .stButton>button:hover {
+        background-color: #45a049;
+    }
+    .stTextInput>div>div>input {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .stNumberInput>div>div>input {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .stMarkdown {
+        font-size: 16px;
+    }
+    .stHeader {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .stSubheader {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Function to generate arithmetic questions with specific hints
 def generate_arithmetic_question(difficulty):
     if difficulty == 1:  # easy
