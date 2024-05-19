@@ -181,8 +181,33 @@ def main():
         correct = round(user_answer, 1) == question['answer']
         if correct:
             st.session_state.score += 1
-            st.session_state.feedback = "
+            st.session_state.feedback = "Correct!"
+        else:
+            st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
 
+        st.session_state.answers.append({
+            'question': question['question'],
+            'answer': user_answer,
+            'correct': correct,
+            'difficulty': st.session_state.current_difficulty,
+            'time_taken': time_taken
+        })
+
+        st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
+        st.session_state.question_number += 1
+
+        # Reset for the next question
+        st.session_state.current_question = None
+        st.session_state.start_time = time.time()
+        st.session_state.user_answer = ""  # Reset user answer for next question
+        st.experimental_rerun()
+
+    if st.session_state.feedback:
+        st.write(st.session_state.feedback)
+        st.session_state.feedback = None
+
+if __name__ == "__main__":
+    main()
 
 
 
