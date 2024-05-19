@@ -43,6 +43,10 @@ st.markdown("""
     .blue-text {
         color: #007BFF;
     }
+    .blue-label {
+        color: #007BFF;
+        font-size: 16px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -158,7 +162,8 @@ def main():
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
-    user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
+    st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
+    user_answer = st.text_input('', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
 
     if st.button('Show Hint'):
         st.session_state.show_hint = True
