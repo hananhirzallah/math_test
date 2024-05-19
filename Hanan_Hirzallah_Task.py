@@ -178,6 +178,7 @@ def main():
                 <br>&nbsp;&nbsp;&nbsp;1. Number of correct answers.
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
+                <br>&nbsp;&nbsp;&nbsp;4. Correct attempts out of total attempts for each operation, this way you can know in which area you excel and which areas to improve on.
                 <br>- There's also an option to restart the quiz.
                 <br><br>
                 Have fun and good luck!!
