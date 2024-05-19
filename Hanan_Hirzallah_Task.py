@@ -21,18 +21,18 @@ st.markdown("""
         background-color: #0056b3;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #ccc;
+        border: 1px solid #007BFF;
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #000000;
+        color: #007BFF;
     }
     .stNumberInput>div>div>input {
-        border: 1px solid #ccc;
+        border: 1px solid #007BFF;
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #000000;
+        color: #007BFF;
     }
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown p {
         color: #007BFF;
