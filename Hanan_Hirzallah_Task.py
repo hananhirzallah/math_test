@@ -234,21 +234,19 @@ def main():
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
-        st.write("All Done!")
+        st.write("Test completed!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
-        st.write(f"Total Time: {performance['total_time']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
-        st.write(f"Performance by difficulty level: ")
+        st.write(f"Total Time: {performance['total_time']}")
         
-        # display performance by difficulty level
+        # Display performance by difficulty level
         for difficulty, data in performance['difficulty_performance'].items():
             difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
             st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
 
-        st.write(f"Performance by operation: ")
-        # display performance by operation
+        # Display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
         
@@ -298,7 +296,7 @@ def main():
             correct = round(user_answer, 1) == question['answer']
             if correct:
                 st.session_state.score += 1
-                st.session_state.feedback = "Good Job!"
+                st.session_state.feedback = "Correct!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # for the second attempt
                 st.session_state.question_number += 1
@@ -306,18 +304,18 @@ def main():
                     'question': question['question'],
                     'answer': user_answer,
                     'correct': True,
-                    'difficulty': st.session_state.current_difficulty,
+                    'difficulty': question['difficulty'],
                     'time_taken': time_taken,
                     'operation': question['operation']
                 })
             else:
                 if st.session_state.second_chance:
-                    st.session_state.feedback = f"Hard Luck! The correct answer was: {question['answer']}"
+                    st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
                         'correct': False,
-                        'difficulty': st.session_state.current_difficulty,
+                        'difficulty': question['difficulty'],
                         'time_taken': time_taken,
                         'operation': question['operation']
                     })
@@ -330,7 +328,7 @@ def main():
                         'question': question['question'],
                         'answer': user_answer,
                         'correct': False,
-                        'difficulty': st.session_state.current_difficulty,
+                        'difficulty': question['difficulty'],
                         'time_taken': time_taken,
                         'operation': question['operation']
                     })
