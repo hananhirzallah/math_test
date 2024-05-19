@@ -16,7 +16,7 @@ st.markdown("""
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        width: 120px;  /* Adjusted width */
+        width: 140px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
     }
     .stButton>button:hover {
