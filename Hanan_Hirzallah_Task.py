@@ -236,19 +236,18 @@ def main():
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
-        st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
-        st.write("<b>## Performance Summary</b>", unsafe_allow_html=True)
-        st.write("<b>Correct Answers:</b> " + str(performance['correct_answers']), unsafe_allow_html=True)
-        st.write("<b>Total Time:</b> " + str(performance['total_time']), unsafe_allow_html=True)
-        st.write("<b>Average Difficulty:</b> " + str(round(performance['average_difficulty'], 2)), unsafe_allow_html=True)
+        st.markdown("**## Performance Summary**")
+        st.markdown(f"**Correct Answers:** {performance['correct_answers']}")
+        st.markdown(f"**Total Time:** {performance['total_time']}")
+        st.markdown(f"**Average Difficulty:** {round(performance['average_difficulty'], 2)}")
 
-        st.write(f"<b>Performance by difficulty level:</b>", unsafe_allow_html=True)
+        st.markdown(f"**Performance by difficulty level:**")
         # display performance by difficulty level
         for difficulty, data in performance['difficulty_performance'].items():
             difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
             st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
 
-        st.write(f"<b>Performance by operation:</b>", unsafe_allow_html=True)
+        st.markdown(f"**Performance by operation:**")
         # display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
@@ -357,6 +356,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
