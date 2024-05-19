@@ -15,39 +15,39 @@ st.markdown("""
         border: none;
         padding: 10px 20px;
         font-size: 16px;
-        cursor: pointer;
+        cursor: pointer.
     }
     .stButton>button:hover {
-        background-color: #0056b3;
+        background-color: #0056b3.
     }
     .stTextInput>div>div>input {
-        border: 1px solid #007BFF;
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 16px;
-        color: #007BFF;
+        border: 1px solid #007BFF.
+        border-radius: 5px.
+        padding: 10px.
+        font-size: 16px.
+        color: #007BFF.
     }
     .stNumberInput>div>div>input {
-        border: 1px solid #007BFF;
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 16px;
-        color: #007BFF;
+        border: 1px solid #007BFF.
+        border-radius: 5px.
+        padding: 10px.
+        font-size: 16px.
+        color: #007BFF.
     }
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown p {
-        color: #007BFF;
+        color: #007BFF.
     }
     .stMarkdown p {
-        font-size: 16px;
+        font-size: 16px.
     }
     .blue-text {
-        color: #007BFF;
-        margin-bottom: -100px;
+        color: #007BFF.
+        margin-bottom: -100px.
     }
     .blue-label {
-        color: #007BFF;
-        font-size: 16px;
-        margin-bottom: -100px;
+        color: #007BFF.
+        font-size: 16px.
+        margin-bottom: -100px.
     }
     </style>
 """, unsafe_allow_html=True)
@@ -65,19 +65,45 @@ def generate_arithmetic_question(difficulty):
     if operation == '+':
         question = f"{a} + {b}"
         answer = a + b
-        hint = f"Think about adding {a} and {b} together."
+        hint = (
+            f"To solve {a} + {b}:\n"
+            f"1. Write the numbers one under the other. Make sure the digits on the right are lined up.\n"
+            f"2. Start adding from the right side.\n"
+            f"3. If the sum is 10 or more, write down the right digit and put the left digit above the next column.\n"
+            f"Example: {a} + {b} = {a + b}. You can do it!"
+        )
     elif operation == '-':
         question = f"{a} - {b}"
         answer = a - b
-        hint = f"Think about subtracting {b} from {a}."
+        hint = (
+            f"To solve {a} - {b}:\n"
+            f"1. Write the numbers one under the other. Make sure the digits on the right are lined up.\n"
+            f"2. Start subtracting from the right side.\n"
+            f"3. If the top number is smaller, borrow from the next column on the left.\n"
+            f"Example: {a} - {b} = {a - b}. You're doing great!"
+        )
     elif operation == '*':
         question = f"{a} * {b}"
         answer = a * b
-        hint = f"Think about multiplying {a} and {b}."
+        hint = (
+            f"To solve {a} * {b}:\n"
+            f"1. Write the numbers one under the other.\n"
+            f"2. Multiply the bottom number by each digit of the top number, starting from the right.\n"
+            f"3. Write each result below, shifting one place to the left each time.\n"
+            f"4. Add up all the results to get the final answer.\n"
+            f"Example: {a} * {b} = {a * b}. Keep it up!"
+        )
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
-        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
+        hint = (
+            f"To solve {a} / {b}:\n"
+            f"1. See how many times {b} fits into {a}.\n"
+            f"2. Write down the answer above the division line.\n"
+            f"3. If there's any left over, that's the remainder.\n"
+            f"4. Continue dividing to get a decimal if needed, and round to one decimal place.\n"
+            f"Example: {a} / {b} ≈ {round(a / b, 1)}. Awesome job!"
+        )
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
