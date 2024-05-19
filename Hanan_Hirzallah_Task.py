@@ -52,6 +52,8 @@ def handle_feedback(user_answer, correct_answer, current_difficulty, second_chan
 
 def main():
     set_styles()
+    st.title("Math Test!")
+
     if 'quiz_started' not in st.session_state:
         st.session_state.quiz_started = False
 
@@ -168,7 +170,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
