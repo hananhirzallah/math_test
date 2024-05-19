@@ -233,6 +233,7 @@ def main():
                 st.session_state.feedback = "Correct!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # Reset second chance flag
+                st.session_state.question_number += 1
             else:
                 if st.session_state.second_chance:
                     st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
@@ -257,7 +258,6 @@ def main():
 
             # Reset for the next question
             st.session_state.current_question = None
-            st.session_state.start_time = time.time()
             st.session_state.user_answer = ""  # Reset user answer for next question
             st.experimental_rerun()
 
@@ -270,7 +270,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
