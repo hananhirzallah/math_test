@@ -224,6 +224,7 @@ def main():
                 user_answer = float(user_answer)
             except ValueError:
                 st.session_state.feedback = "Please enter a valid number."
+                st.session_state.user_answer = ""  # Reset user answer
                 st.experimental_rerun()
                 return
 
@@ -270,7 +271,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
