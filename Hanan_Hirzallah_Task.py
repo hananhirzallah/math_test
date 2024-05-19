@@ -15,39 +15,39 @@ st.markdown("""
         border: none;
         padding: 10px 20px;
         font-size: 16px;
-        cursor: pointer.
+        cursor: pointer;
     }
     .stButton>button:hover {
-        background-color: #0056b3.
+        background-color: #0056b3;
     }
     .stTextInput>div>div>input {
-        border: 1px solid #007BFF.
-        border-radius: 5px.
-        padding: 10px.
-        font-size: 16px.
-        color: #007BFF.
+        border: 1px solid #007BFF;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        color: #007BFF;
     }
     .stNumberInput>div>div>input {
-        border: 1px solid #007BFF.
-        border-radius: 5px.
-        padding: 10px.
-        font-size: 16px.
-        color: #007BFF.
+        border: 1px solid #007BFF;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        color: #007BFF;
     }
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown p {
-        color: #007BFF.
+        color: #007BFF;
     }
     .stMarkdown p {
-        font-size: 16px.
+        font-size: 16px;
     }
     .blue-text {
-        color: #007BFF.
-        margin-bottom: -100px.
+        color: #007BFF;
+        margin-bottom: -100px;
     }
     .blue-label {
-        color: #007BFF.
-        font-size: 16px.
-        margin-bottom: -100px.
+        color: #007BFF;
+        font-size: 16px;
+        margin-bottom: -100px;
     }
     </style>
 """, unsafe_allow_html=True)
