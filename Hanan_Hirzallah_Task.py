@@ -59,7 +59,7 @@ def adjust_difficulty(current_difficulty, correct):
 def reset_quiz():
     keys_to_clear = [
         'num_questions', 'current_difficulty', 'score', 'question_number', 'answers',
-        'current_question', 'start_time', 'feedback', 'user_answer'
+        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint'
     ]
     for key in keys_to_clear:
         if key in st.session_state:
@@ -81,6 +81,7 @@ def main():
         st.session_state.start_time = None
         st.session_state.feedback = None
         st.session_state.user_answer = ""
+        st.session_state.show_hint = False
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
@@ -107,11 +108,18 @@ def main():
         st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
         st.session_state.user_answer = ""  # Reset user answer for new question
+        st.session_state.show_hint = False  # Reset hint visibility for new question
 
     question = st.session_state.current_question
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
     user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
+
+    if st.button('Show Hint'):
+        st.session_state.show_hint = True
+
+    if st.session_state.show_hint:
+        st.write(f"Hint: {question['hint']}")
 
     if st.button('Submit', key='submit_button'):
         if st.session_state.question_number >= st.session_state.num_questions:
@@ -132,7 +140,7 @@ def main():
             st.session_state.score += 1
             st.session_state.feedback = "Correct!"
         else:
-            st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
+            st.session_state.feedback = f"Wrong Answer! The correct answer was: {question['answer']}"
 
         st.session_state.answers.append({
             'question': question['question'],
