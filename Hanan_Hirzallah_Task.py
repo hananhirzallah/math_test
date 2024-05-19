@@ -42,12 +42,12 @@ st.markdown("""
     }
     .blue-text {
         color: #007BFF;
-        margin-bottom: -50px;
+        margin-bottom: -70px;
     }
     .blue-label {
         color: #007BFF;
         font-size: 16px;
-        margin-bottom: -50px;
+        margin-bottom: -70px;
     }
     </style>
 """, unsafe_allow_html=True)
