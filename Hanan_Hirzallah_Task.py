@@ -144,7 +144,7 @@ def adjust_difficulty(current_difficulty, correct):
 def reset_quiz():
     keys_to_clear = [
         'num_questions', 'current_difficulty', 'score', 'question_number', 'answers',
-        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint', 'second_chance'
+        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint', 'second_chance', 'total_start_time'
     ]
     for key in keys_to_clear:
         if key in st.session_state:
@@ -168,6 +168,7 @@ def main():
         st.session_state.user_answer = ""
         st.session_state.show_hint = False
         st.session_state.second_chance = False
+        st.session_state.total_start_time = time.time()  # Initialize total start time
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
@@ -180,6 +181,8 @@ def main():
 
     # Check if the quiz is complete
     if st.session_state.question_number >= st.session_state.num_questions:
+        total_time = time.time() - st.session_state.total_start_time
+        st.session_state.answers.append({'time_taken': total_time})
         performance = evaluate_performance(st.session_state.answers)
         st.write("Test completed!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
