@@ -84,10 +84,11 @@ def main():
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
-        st.session_state.num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
+        num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
         if st.button('Confirm'):
+            st.session_state.num_questions = num_questions
             st.experimental_rerun()
-        st.stop()  # Stop execution here until the user sets the number of questions
+        return  # Return here to wait for the user to confirm the number of questions
 
     # Check if the quiz is complete
     if st.session_state.question_number >= st.session_state.num_questions:
@@ -148,8 +149,14 @@ def main():
         st.session_state.current_question = None
         st.session_state.start_time = time.time()
         st.session_state.user_answer = ""  # Reset user answer for next question
- 
+        st.experimental_rerun()
 
+    if st.session_state.feedback:
+        st.write(st.session_state.feedback)
+        st.session_state.feedback = None
+
+if __name__ == "__main__":
+    main()
 
 
 
