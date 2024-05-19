@@ -48,7 +48,7 @@ def styles():
         </style>
     """, unsafe_allow_html=True)
 
-def test_composition(difficulty):
+def question_composition(difficulty):
     ranges = {
         1: (1, 10),
         2: (10, 100),
@@ -206,7 +206,7 @@ def main():
         return  # concludes upon completion
 
     if st.session_state.current_question is None:
-        st.session_state.current_question = task_composition(st.session_state.current_difficulty)
+        st.session_state.current_question = question_composition(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
         st.session_state.user_answer = ""  # resets answer for new question
         st.session_state.show_hint = False  
@@ -279,7 +279,7 @@ def main():
                         'time_taken': time_taken
                     })
                     st.session_state.question_number += 1  # Increment the question number for the second attempt
-                    st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
+                    st.session_state.current_question = question_composition(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
                     st.session_state.user_answer = ""  
                     st.session_state.second_chance = True
@@ -300,6 +300,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
