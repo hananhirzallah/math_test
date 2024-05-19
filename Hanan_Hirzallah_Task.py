@@ -216,7 +216,9 @@ def main():
     difficulty_map = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}
     difficulty_label = difficulty_map[question['difficulty']]
 
-    st.write(f"Question {st.session_state.question_number + 1} (Difficulty: {difficulty_label}): {question['question']} (Round your answer to one decimal place if necessary)")
+    # Display difficulty level above the question
+    st.markdown(f"<p class='blue-text'>Difficulty: {difficulty_label}</p>", unsafe_allow_html=True)
+    st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
     st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
     user_answer = st.text_input('', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
@@ -300,6 +302,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
