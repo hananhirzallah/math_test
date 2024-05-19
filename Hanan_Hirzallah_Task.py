@@ -113,7 +113,7 @@ def evaluate_performance(answers, total_time):
     return {
         "correct_answers": correct_answers,
         "average_difficulty": average_difficulty,
-        "total_time": f"{minutes} minutes and {seconds:.1f} seconds"
+        "total_time": f"{minutes} minute(s) and {seconds:.1f} seconds"
     }
 
 def adjust_difficulty(current_difficulty, correct):
