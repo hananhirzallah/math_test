@@ -46,6 +46,12 @@ def styles():
         }
         .hint { color: #007BFF; }
         .bold { font-weight: bold; }
+        .summary-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+            margin-top: 20px;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -236,7 +242,7 @@ def main():
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
-        st.markdown("**## Performance Summary**")
+        st.markdown("<div class='summary-title'>Performance Summary</div>", unsafe_allow_html=True)
         st.markdown(f"**Correct Answers:** {performance['correct_answers']}")
         st.markdown(f"**Total Time:** {performance['total_time']}")
         st.markdown(f"**Average Difficulty:** {round(performance['average_difficulty'], 2)}")
@@ -356,6 +362,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
