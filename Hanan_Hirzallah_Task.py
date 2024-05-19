@@ -25,32 +25,20 @@ st.markdown("""
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #007BFF;
+        color: #000000;
     }
     .stNumberInput>div>div>input {
         border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
+        color: #000000;
+    }
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown p {
         color: #007BFF;
     }
-    .stMarkdown {
+    .stMarkdown p {
         font-size: 16px;
-        color: #007BFF;
-    }
-    .stHeader {
-        font-size: 24px;
-        font-weight: bold;
-        color: #007BFF;
-    }
-    .stSubheader {
-        font-size: 20px;
-        font-weight: bold;
-        color: #0056b3;
-    }
-    .stAlert {
-        font-size: 16px;
-        color: #0056b3;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -218,5 +206,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
