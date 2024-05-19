@@ -6,11 +6,11 @@ import streamlit as st
 st.markdown("""
     <style>
     .main {
-        background-color: #f0f2f6;
+        background-color: #f0f4f8;
     }
     .stButton>button {
         color: #ffffff;
-        background-color: #4CAF50;
+        background-color: #007BFF;
         border-radius: 5px;
         border: none;
         padding: 10px 20px;
@@ -18,7 +18,7 @@ st.markdown("""
         cursor: pointer;
     }
     .stButton>button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
     .stTextInput>div>div>input {
         border: 1px solid #ccc;
@@ -38,10 +38,12 @@ st.markdown("""
     .stHeader {
         font-size: 24px;
         font-weight: bold;
+        color: #007BFF;
     }
     .stSubheader {
         font-size: 20px;
         font-weight: bold;
+        color: #0056b3;
     }
     </style>
 """, unsafe_allow_html=True)
