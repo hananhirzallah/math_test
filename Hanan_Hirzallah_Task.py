@@ -46,6 +46,7 @@ st.markdown("""
     .blue-label {
         color: #007BFF;
         font-size: 16px;
+        margin-bottom: -10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -215,6 +216,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
