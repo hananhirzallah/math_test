@@ -27,7 +27,7 @@ st.markdown("""
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #007BFF;  /* Black text color */
+        color: #007BFF;
         background-color: #ffffff;  /* White background color */
     }
     .stNumberInput>div>div>input {
@@ -35,7 +35,7 @@ st.markdown("""
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #000000;  /* Black text color */
+        color: #007BFF;
         background-color: #ffffff;  /* White background color */
     }
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6, .stMarkdown p {
@@ -167,7 +167,14 @@ def main():
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
         st.markdown('<p class="blue-text">Choose number of questions (10-20):</p>', unsafe_allow_html=True)
-        num_questions = st.number_input('', min_value=10, max_value=20, step=1)
+        num_questions = st.number_input('', min_value=10, max_value=20, step=1, key='num_questions_input')
+        st.markdown("""
+            <style>
+            div[data-baseweb="input"] > div {
+                background-color: #ffffff;  /* White background color */
+            }
+            </style>
+        """, unsafe_allow_html=True)
         if st.button('Confirm'):
             st.session_state.num_questions = num_questions
             st.experimental_rerun()
