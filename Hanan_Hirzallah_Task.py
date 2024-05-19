@@ -195,7 +195,7 @@ def main():
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
-        st.write("Test completed!")
+        st.write("All Done!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
