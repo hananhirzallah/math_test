@@ -168,14 +168,14 @@ def main():
     if st.session_state.num_questions is None:
         st.markdown('<p class="blue-text">Choose number of questions (10-20):</p>', unsafe_allow_html=True)
         num_questions = st.number_input('', min_value=10, max_value=20, step=1, key='num_questions_input')
-        st.markdown("""
-            <style>
-            div[data-baseweb="input"] > div {
-                background-color: #ffffff;  /* White background color */
-                font_color: #007BFF;
-            }
-            </style>
-        """, unsafe_allow_html=True)
+        # st.markdown("""
+        #     <style>
+        #     div[data-baseweb="input"] > div {
+        #         background-color: #ffffff;  /* White background color */
+        #         font_color: #007BFF;
+        #     }
+        #     </style>
+        # """, unsafe_allow_html=True)
         if st.button('Confirm'):
             st.session_state.num_questions = num_questions
             st.experimental_rerun()
