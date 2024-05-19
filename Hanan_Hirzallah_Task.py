@@ -3,7 +3,7 @@ import time
 import streamlit as st
 
 # Set the color styles using Streamlit's markdown feature with HTML and CSS
-def set_styles():
+def styles():
     st.markdown("""
         <style>
         .main { background-color: #e0f7fa; }
@@ -48,7 +48,7 @@ def set_styles():
         </style>
     """, unsafe_allow_html=True)
 
-def generate_arithmetic_question(difficulty):
+def test_composition(difficulty):
     ranges = {
         1: (1, 10),
         2: (10, 100),
@@ -118,25 +118,19 @@ def evaluate_performance(answers, total_time):
 
 def adjust_difficulty(current_difficulty, correct):
     if correct:
-        return min(4, current_difficulty + 1)  # Increase difficulty if correct
+        return min(4, current_difficulty + 1)  # increases difficulty if correct
     else:
-        return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
+        return max(1, current_difficulty - 1)  # decreases difficulty if incorrect
 
 def reset_quiz():
-    keys_to_clear = [
-        'num_questions', 'current_difficulty', 'score', 'question_number', 'answers',
-        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint', 'second_chance', 'total_start_time'
-    ]
-    for key in keys_to_clear:
-        if key in st.session_state:
-            del st.session_state[key]
+    st.session_state.clear()
     st.experimental_rerun()
 
 def main():
-    set_styles()
+    styles()
     st.title("Math Test!")
 
-    # Display homepage content
+    # display the homepage contents
     if 'homepage_displayed' not in st.session_state:
         st.session_state.homepage_displayed = False
     
@@ -164,15 +158,15 @@ def main():
             </div>
         """, unsafe_allow_html=True)
         
-        # Add a div to ensure the button is placed below the text with some space
+        # ensures the button is placed under the text
         st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
         
         if st.button('Start Quiz'):
             st.session_state.homepage_displayed = True
             st.experimental_rerun()
-        return  # Stop here to display the homepage content
+        return  
     
-    # Initialize session state variables if not already done
+    # session variables
     if 'num_questions' not in st.session_state:
         st.session_state.num_questions = None
         st.session_state.current_difficulty = 1
@@ -185,19 +179,19 @@ def main():
         st.session_state.user_answer = ""
         st.session_state.show_hint = False
         st.session_state.second_chance = False
-        st.session_state.total_start_time = None  # Initialize total start time
+        st.session_state.total_start_time = None  
 
-    # Request number of questions if not already set
+    # checks if number of questions is not set, then requests it
     if st.session_state.num_questions is None:
         st.markdown('<p class="blue-text">Choose number of questions (10-20):</p>', unsafe_allow_html=True)
         num_questions = st.number_input('', min_value=10, max_value=20, step=1, key='num_questions_input')
         if st.button('Confirm'):
             st.session_state.num_questions = num_questions
-            st.session_state.total_start_time = time.time()  # Initialize total start time when quiz starts
+            st.session_state.total_start_time = time.time()  # starts the time when the quiz starts
             st.experimental_rerun()
-        return  # Return here to wait for the user to confirm the number of questions
+        return  # this return statement waits for the user to pick a number
 
-    # Check if the quiz is complete
+    # checks if quiz is complete
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
@@ -209,13 +203,13 @@ def main():
         st.write(f"Total Time: {performance['total_time']}")
         if st.button('Start New Quiz', key='start_new_quiz_button'):
             reset_quiz()
-        return  # Stop execution after the last question
+        return  # concludes upon completion
 
     if st.session_state.current_question is None:
-        st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
+        st.session_state.current_question = task_composition(st.session_state.current_difficulty)
         st.session_state.start_time = time.time()
-        st.session_state.user_answer = ""  # Reset user answer for new question
-        st.session_state.show_hint = False  # Reset hint visibility for new question
+        st.session_state.user_answer = ""  # resets answer for new question
+        st.session_state.show_hint = False  
 
     question = st.session_state.current_question
 
@@ -227,7 +221,7 @@ def main():
     st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
     user_answer = st.text_input('', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2) # so that "Show Hint" and "Submit" buttons are next to one another
     with col1:
         if st.button('Show Hint'):
             st.session_state.show_hint = True
@@ -235,7 +229,7 @@ def main():
     with col2:
         if st.button('Submit', key='submit_button'):
             if st.session_state.question_number >= st.session_state.num_questions:
-                return  # Stop if quiz is complete
+                return  # stop if quiz is complete
 
             end_time = time.time()
             time_taken = end_time - st.session_state.start_time
@@ -244,7 +238,7 @@ def main():
                 user_answer = float(user_answer)
             except ValueError:
                 st.session_state.feedback = "Please enter a valid number."
-                st.session_state.user_answer = ""  # Reset user answer
+                st.session_state.user_answer = "" 
                 st.experimental_rerun()
                 return
 
@@ -253,7 +247,7 @@ def main():
                 st.session_state.score += 1
                 st.session_state.feedback = "Correct!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
-                st.session_state.second_chance = False  # Reset second chance flag
+                st.session_state.second_chance = False  # for the second attempt
                 st.session_state.question_number += 1
                 st.session_state.answers.append({
                     'question': question['question'],
@@ -274,7 +268,7 @@ def main():
                     })
                     st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                     st.session_state.question_number += 1
-                    st.session_state.second_chance = False  # Reset second chance flag
+                    st.session_state.second_chance = False  # reset second chance flag
                 else:
                     st.session_state.feedback = "Wrong Answer! Try another question of the same difficulty."
                     st.session_state.answers.append({
@@ -287,14 +281,14 @@ def main():
                     st.session_state.question_number += 1  # Increment the question number for the second attempt
                     st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
-                    st.session_state.user_answer = ""  # Reset user answer for the new question
+                    st.session_state.user_answer = ""  
                     st.session_state.second_chance = True
                     st.experimental_rerun()
                     return
 
-            # Reset for the next question
+            # reset for the next question
             st.session_state.current_question = None
-            st.session_state.user_answer = ""  # Reset user answer for next question
+            st.session_state.user_answer = ""  
             st.experimental_rerun()
 
     if st.session_state.show_hint:
