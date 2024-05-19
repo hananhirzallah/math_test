@@ -231,6 +231,7 @@ def main():
             if correct:
                 st.session_state.score += 1
                 st.session_state.feedback = "Correct!"
+                st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # Reset second chance flag
             else:
                 if st.session_state.second_chance:
