@@ -18,6 +18,7 @@ st.markdown("""
         cursor: pointer;
         width: 140px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
+        margin-top: 20px;  /* Add margin to the top of the button */
     }
     .stButton>button:hover {
         background-color: #0056b3;
@@ -46,7 +47,7 @@ st.markdown("""
     }
     .blue-text {
         color: #007BFF;
-        margin-bottom: -100px;
+        margin-bottom: 20px;  /* Ensure some space at the bottom of the text */
     }
     .blue-label {
         color: #007BFF;
@@ -59,9 +60,6 @@ st.markdown("""
     input[type="number"] {
         background-color: #ffffff;  /* White background color */
         color: #007BFF;  /* Blue text color */
-    }
-    .content-container {
-        margin-bottom: 20px;  /* Add margin to the bottom of the content */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -163,26 +161,31 @@ def main():
     
     if not st.session_state.get('homepage_displayed', False):
         st.markdown("""
-            <div class="content-container">
-                <p class="blue-text">
+            <div class="blue-text">
                 Hello! I'm Hanan Hirzallah and this is my math quiz!
+                <br><br>
                 Instructions:
                 <br>- Firstly, The quiz will ask you to choose the number of questions you want, it has to be within the range (10-20).
                 <br>- Once you select and confirm, the quiz begins.
                 <br>- Each question has a hint, where the way to solve the question is displayed. Just press "Show Hint".
                 <br>- The quiz is divided into 3 difficulty levels: Easy, Medium, and Hard.
-                <br>- If you solve the question correctly, you get upgraded to the next level! However, if you answer it incorrectly, you get a second attempt at a similar question.
-                <br>- If you answer your second attempt correctly, you get upgraded to the next level. If not, you get downgraded to the previous level.
-                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance, including:
+                <br>- If you solve the question correctly, you get upgraded to the next level!
+                <br>- However, if you answer it incorrectly, you have a second attempt at a similar question.
+                <br>- If you answer your second attempt correctly, you get upgraded to the next level
+                <br>- If not, you get downgraded to the previous level.
+                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance including:
                 <br>&nbsp;&nbsp;&nbsp;1. Number of correct answers.
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
                 <br>- There's also an option to restart the quiz.
                 <br><br>
                 Have fun and good luck!!
-                </p>
             </div>
         """, unsafe_allow_html=True)
+        
+        # Add a div to ensure the button is placed below the text with some space
+        st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
+        
         if st.button('Start Quiz'):
             st.session_state.homepage_displayed = True
             st.experimental_rerun()
@@ -322,6 +325,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
