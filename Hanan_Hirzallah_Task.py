@@ -45,6 +45,7 @@ def styles():
             margin-bottom: -100px;
         }
         .hint { color: #007BFF; }
+        .underline { text-decoration: underline; }
         </style>
     """, unsafe_allow_html=True)
 
@@ -241,13 +242,13 @@ def main():
         st.write(f"Total Time: {performance['total_time']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
 
-        st.write(f"Performance by difficulty level: ")
+        st.write(f"<p class='underline'>Performance by difficulty level:</p>", unsafe_allow_html=True)
         # display performance by difficulty level
         for difficulty, data in performance['difficulty_performance'].items():
             difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
             st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
 
-        st.write(f"Performance by operation: ")
+        st.write(f"<p class='underline'>Performance by operation:</p>", unsafe_allow_html=True)
         # display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
@@ -356,6 +357,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
