@@ -21,7 +21,40 @@ def generate_arithmetic_question(difficulty):
     operation = random.choice(list(operations.keys()))
     question = f"{a} {operation} {b}"
     answer = round(eval(question), 1) if operation == '/' else eval(question)
-    hint = f"<p class='hint'>To {operations[operation]} {a} and {b}:</p><p class='hint'>1. Explanation step 1...</p><p class='hint'>2. Explanation step 2...</p>"
+    
+    if operation == '+':
+        hint = (
+            f"<p class='hint'>To solve {a} + {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
+            f"<p class='hint'>2. Start adding from the right side.</p>"
+            f"<p class='hint'>3. If the sum is 10 or more, write down the right digit and put the left digit above the next column.</p>"
+            f"<p class='hint'>4. Add the next column, including any number carried over.</p>"
+        )
+    elif operation == '-':
+        hint = (
+            f"<p class='hint'>To solve {a} - {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
+            f"<p class='hint'>2. Start subtracting from the right side.</p>"
+            f"<p class='hint'>3. If the top number is smaller, borrow from the next column on the left.</p>"
+            f"<p class='hint'>4. Subtract the next column, including any number borrowed.</p>"
+        )
+    elif operation == '*':
+        hint = (
+            f"<p class='hint'>To solve {a} * {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other.</p>"
+            f"<p class='hint'>2. Multiply the bottom number by each digit of the top number, starting from the right.</p>"
+            f"<p class='hint'>3. Write each result below, shifting one place to the left each time.</p>"
+            f"<p class='hint'>4. Add up all the results to get the final answer.</p>"
+        )
+    else:
+        hint = (
+            f"<p class='hint'>To solve {a} / {b}:</p>"
+            f"<p class='hint'>1. See how many times {b} fits into {a}.</p>"
+            f"<p class='hint'>2. Write down the answer above the division line.</p>"
+            f"<p class='hint'>3. If there's any left over, that's the remainder.</p>"
+            f"<p class='hint'>4. Continue dividing to get a decimal if needed, and round to one decimal place.</p>"
+        )
+    
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
 def evaluate_performance(answers, total_time):
@@ -192,6 +225,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
