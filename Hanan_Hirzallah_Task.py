@@ -2,7 +2,7 @@ import random
 import time
 import streamlit as st
 
-# for the colors
+# Set the color styles using Streamlit's markdown feature with HTML and CSS
 def styles():
     st.markdown("""
         <style>
@@ -99,22 +99,48 @@ def question_composition(difficulty):
             f"<p class='hint'>4. Continue dividing to get a decimal if needed, and round to one decimal place.</p>"
         )
     
-    return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
+    return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint, "operation": operation}
 
 def evaluate_performance(answers, total_time):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = round(total_time, 1)  
+    total_time = round(total_time, 1)  # Round total time to one decimal place
 
-    # convert total time to minutes and seconds
+    # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
     seconds = total_time % 60
 
-    return {
+    operation_performance = {"addition": {"correct": 0, "total": 0},
+                             "subtraction": {"correct": 0, "total": 0},
+                             "multiplication": {"correct": 0, "total": 0},
+                             "division": {"correct": 0, "total": 0}}
+
+    for ans in answers:
+        if ans['operation'] == '+':
+            operation_performance["addition"]["total"] += 1
+            if ans['correct']:
+                operation_performance["addition"]["correct"] += 1
+        elif ans['operation'] == '-':
+            operation_performance["subtraction"]["total"] += 1
+            if ans['correct']:
+                operation_performance["subtraction"]["correct"] += 1
+        elif ans['operation'] == '*':
+            operation_performance["multiplication"]["total"] += 1
+            if ans['correct']:
+                operation_performance["multiplication"]["correct"] += 1
+        elif ans['operation'] == '/':
+            operation_performance["division"]["total"] += 1
+            if ans['correct']:
+                operation_performance["division"]["correct"] += 1
+
+    performance_summary = {
         "correct_answers": correct_answers,
         "average_difficulty": average_difficulty,
-        "total_time": f"{minutes} minute(s) and {seconds:.1f} seconds"
+        "total_time": f"{minutes} minutes and {seconds:.1f} seconds",
+        "operation_performance": operation_performance
     }
+
+    return performance_summary
 
 def adjust_difficulty(current_difficulty, correct):
     if correct:
@@ -195,12 +221,17 @@ def main():
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
-        st.write("All Done!")
+        st.write("Test completed!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
-        st.write(f"Time Taken: {performance['total_time']}")
+        st.write(f"Total Time: {performance['total_time']}")
+        
+        # Display performance by operation
+        for operation, data in performance['operation_performance'].items():
+            st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
+        
         if st.button('Start New Quiz', key='start_new_quiz_button'):
             reset_quiz()
         return  # concludes upon completion
@@ -217,7 +248,7 @@ def main():
     difficulty_label = difficulty_map[question['difficulty']]
 
     # Display difficulty level above the question
-    st.markdown(f"<p class='blue-text'>Difficulty Level: {difficulty_label}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='blue-text'>Difficulty: {difficulty_label}</p>", unsafe_allow_html=True)
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
     st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
@@ -247,7 +278,7 @@ def main():
             correct = round(user_answer, 1) == question['answer']
             if correct:
                 st.session_state.score += 1
-                st.session_state.feedback = "Good Job!"
+                st.session_state.feedback = "Correct!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # for the second attempt
                 st.session_state.question_number += 1
@@ -256,29 +287,32 @@ def main():
                     'answer': user_answer,
                     'correct': True,
                     'difficulty': st.session_state.current_difficulty,
-                    'time_taken': time_taken
+                    'time_taken': time_taken,
+                    'operation': question['operation']
                 })
             else:
                 if st.session_state.second_chance:
-                    st.session_state.feedback = f"Hard Luck! The correct answer was: {question['answer']}"
+                    st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
                         'correct': False,
                         'difficulty': st.session_state.current_difficulty,
-                        'time_taken': time_taken
+                        'time_taken': time_taken,
+                        'operation': question['operation']
                     })
                     st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                     st.session_state.question_number += 1
                     st.session_state.second_chance = False  # reset second chance flag
                 else:
-                    st.session_state.feedback = "Wrong Answer! Try another question."
+                    st.session_state.feedback = "Wrong Answer! Try another question of the same difficulty."
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
                         'correct': False,
                         'difficulty': st.session_state.current_difficulty,
-                        'time_taken': time_taken
+                        'time_taken': time_taken,
+                        'operation': question['operation']
                     })
                     st.session_state.question_number += 1  # Increment the question number for the second attempt
                     st.session_state.current_question = question_composition(st.session_state.current_difficulty)
@@ -302,6 +336,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
