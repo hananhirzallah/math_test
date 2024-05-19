@@ -199,7 +199,7 @@ def main():
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
                 <br>&nbsp;&nbsp;&nbsp;4. Performance by difficulty level, this way you'd know where you excel and where you need to pratice more.
-                <br>&nbsp;&nbsp;&nbsp;4. Performance by operation, this way you'd know where you excel and where you need to pratice more.
+                <br>&nbsp;&nbsp;&nbsp;5. Performance by operation, this way you'd know where you excel and where you need to pratice more.
                 <br>- There's also an option to restart the quiz.
                 <br><br>
                 Have fun and good luck!!
