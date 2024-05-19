@@ -238,15 +238,17 @@ def main():
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
-        st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
         st.write(f"Total Time: {performance['total_time']}")
+        st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
+        st.write(f"Performance by difficulty level: ")
         
-        # Display performance by difficulty level
+        # display performance by difficulty level
         for difficulty, data in performance['difficulty_performance'].items():
             difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
             st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
 
-        # Display performance by operation
+        st.write(f"Performance by operation: ")
+        # display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
         
