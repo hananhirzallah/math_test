@@ -201,12 +201,16 @@ def main():
             st.session_state.score += 1 if correct else 0
             st.session_state.current_difficulty = next_difficulty
             st.session_state.question_number += 1
-            st.session_state.current_question = None
-            st.session_state.user_answer = ""
-            st.session_state.second_chance = not correct
 
-            if not correct and not st.session_state.second_chance:
+            if correct or st.session_state.second_chance:
+                st.session_state.current_question = None
+                st.session_state.user_answer = ""
+                st.session_state.second_chance = False
+            else:
+                st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
+                st.session_state.start_time = time.time()
                 st.session_state.user_answer = ""  # Reset user answer for the second attempt
+                st.session_state.second_chance = True
 
             st.session_state.feedback = feedback
             st.experimental_rerun()
@@ -220,6 +224,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
