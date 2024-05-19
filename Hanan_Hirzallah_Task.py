@@ -16,7 +16,7 @@ st.markdown("""
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        width: 140px;  /* Adjusted width */
+        width: 120px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
     }
     .stButton>button:hover {
@@ -144,7 +144,7 @@ def adjust_difficulty(current_difficulty, correct):
 def reset_quiz():
     keys_to_clear = [
         'num_questions', 'current_difficulty', 'score', 'question_number', 'answers',
-        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint', 'second_chance'
+        'current_question', 'start_time', 'feedback', 'user_answer', 'show_hint'
     ]
     for key in keys_to_clear:
         if key in st.session_state:
@@ -167,7 +167,6 @@ def main():
         st.session_state.feedback = None
         st.session_state.user_answer = ""
         st.session_state.show_hint = False
-        st.session_state.second_chance = False
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
@@ -231,28 +230,19 @@ def main():
             if correct:
                 st.session_state.score += 1
                 st.session_state.feedback = "Correct!"
-                st.session_state.second_chance = False  # Reset second chance flag
             else:
-                if st.session_state.second_chance:
-                    st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
-                    st.session_state.answers.append({
-                        'question': question['question'],
-                        'answer': user_answer,
-                        'correct': False,
-                        'difficulty': st.session_state.current_difficulty,
-                        'time_taken': time_taken
-                    })
-                    st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
-                    st.session_state.question_number += 1
-                    st.session_state.second_chance = False  # Reset second chance flag
-                else:
-                    st.session_state.feedback = "Wrong Answer! Here is a new question of the same difficulty."
-                    st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
-                    st.session_state.start_time = time.time()
-                    st.session_state.user_answer = ""  # Reset user answer for the new question
-                    st.session_state.second_chance = True
-                    st.experimental_rerun()
-                    return
+                st.session_state.feedback = f"Wrong Answer! The correct answer was: {question['answer']}"
+
+            st.session_state.answers.append({
+                'question': question['question'],
+                'answer': user_answer,
+                'correct': correct,
+                'difficulty': st.session_state.current_difficulty,
+                'time_taken': time_taken
+            })
+
+            st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
+            st.session_state.question_number += 1
 
             # Reset for the next question
             st.session_state.current_question = None
@@ -269,7 +259,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
