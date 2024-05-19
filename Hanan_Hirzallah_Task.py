@@ -1,6 +1,12 @@
 import random
 import time
 import streamlit as st
+import numpy as np
+from transformers import pipeline
+from sklearn.linear_model import LinearRegression
+
+# Initialize NLP model
+nlp = pipeline("text-generation", model="distilgpt2")
 
 # Function to generate arithmetic questions with specific hints
 def generate_arithmetic_question(difficulty):
@@ -9,7 +15,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(100, 1000)
+        a, b = random.randint(100, 1000), random.randint(1000, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -31,6 +37,12 @@ def generate_arithmetic_question(difficulty):
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
+# Function to generate feedback using NLP
+def generate_feedback(question, user_answer, correct_answer):
+    feedback_prompt = f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Explain why."
+    feedback = nlp(feedback_prompt, max_length=50, num_return_sequences=1)[0]['generated_text']
+    return feedback
+
 # Function to evaluate performance
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
@@ -48,12 +60,25 @@ def evaluate_performance(answers):
         "total_time": f"{minutes} minutes and {seconds:.1f} seconds"
     }
 
-# Function to adjust difficulty based on correctness of the previous answer
-def adjust_difficulty(current_difficulty, correct):
-    if correct:
-        return min(3, current_difficulty + 1)  # Increase difficulty if correct
-    else:
-        return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
+# Function to adjust difficulty based on correctness of the previous answers using Linear Regression
+def adjust_difficulty(answers):
+    if len(answers) < 5:
+        return 1  # Start with easy if not enough data
+
+    # Prepare the data
+    X = np.array([i for i in range(len(answers))]).reshape(-1, 1)
+    y = np.array([ans['difficulty'] for ans in answers])
+    correct = np.array([1 if ans['correct'] else 0 for ans in answers])
+
+    # Train a simple linear regression model
+    model = LinearRegression()
+    model.fit(X, correct)
+
+    # Predict the difficulty for the next question
+    next_difficulty = model.predict(np.array([[len(answers)]]))[0]
+    next_difficulty = min(max(1, round(next_difficulty)), 3)  # Ensure difficulty is between 1 and 3
+
+    return next_difficulty
 
 # Function to reset the quiz state
 def reset_quiz():
@@ -99,7 +124,6 @@ def main():
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
         st.write(f"Total Time: {performance['total_time']}")
-
         if st.button('Start New Quiz', key='start_new_quiz_button'):
             reset_quiz()
         return  # Stop execution after the last question
@@ -110,7 +134,7 @@ def main():
         st.session_state.user_answer = ""  # Reset user answer for new question
 
     question = st.session_state.current_question
-    st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
+    st.write(f"Question {st.session_state.question_number + 1} (Difficulty: {question['difficulty']}): {question['question']} (Round your answer to one decimal place if necessary)")
 
     user_answer = st.text_input('Your answer:', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
 
@@ -133,7 +157,9 @@ def main():
             st.session_state.score += 1
             st.session_state.feedback = "Correct!"
         else:
-            st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
+            hint = question['hint']
+            feedback = generate_feedback(question['question'], user_answer, question['answer'])
+            st.session_state.feedback = f"{feedback} Hint: {hint}"
 
         st.session_state.answers.append({
             'question': question['question'],
@@ -143,7 +169,7 @@ def main():
             'time_taken': time_taken
         })
 
-        st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
+        st.session_state.current_difficulty = adjust_difficulty(st.session_state.answers)
         st.session_state.question_number += 1
 
         # Reset for the next question
@@ -158,6 +184,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
