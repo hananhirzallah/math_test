@@ -27,7 +27,7 @@ st.markdown("""
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: ##007BFF;  /* Black text color */
+        color: #007BFF;  /* Black text color */
         background-color: #ffffff;  /* White background color */
     }
     .stNumberInput>div>div>input {
