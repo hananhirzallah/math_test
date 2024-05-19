@@ -172,6 +172,7 @@ def main():
             <style>
             div[data-baseweb="input"] > div {
                 background-color: #ffffff;  /* White background color */
+                color: #007BFF;
             }
             </style>
         """, unsafe_allow_html=True)
