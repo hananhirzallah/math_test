@@ -16,8 +16,8 @@ st.markdown("""
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        width: 150px;
-        height: 50px;
+        width: 100px;  /* Adjusted width */
+        height: 40px;  /* Adjusted height */
     }
     .stButton>button:hover {
         background-color: #0056b3;
@@ -253,6 +253,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
