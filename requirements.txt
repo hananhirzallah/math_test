@@ -1,4 +1,5 @@
 streamlit
 scikit-learn
 matplotlib
-transformers
+transformers==4.41.0
+
