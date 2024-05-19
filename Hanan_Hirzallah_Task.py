@@ -1,6 +1,9 @@
 import random
 import time
 import streamlit as st
+from sklearn.linear_model import LinearRegression
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Function to generate arithmetic questions with specific hints
 def generate_arithmetic_question(difficulty):
@@ -66,6 +69,45 @@ def reset_quiz():
             del st.session_state[key]
     st.experimental_rerun()
 
+# Function to predict user performance
+def predict_performance(answers):
+    if len(answers) < 3:
+        return None
+    difficulties = [ans['difficulty'] for ans in answers]
+    correct = [1 if ans['correct'] else 0 for ans in answers]
+    times = [ans['time_taken'] for ans in answers]
+
+    X = np.array(difficulties).reshape(-1, 1)
+    y = np.array(correct)
+
+    model = LinearRegression()
+    model.fit(X, y)
+    prediction = model.predict([[max(difficulties) + 1]])
+    return prediction[0]
+
+# Function to visualize user performance
+def visualize_performance(answers):
+    difficulties = [ans['difficulty'] for ans in answers]
+    correct = [1 if ans['correct'] else 0 for ans in answers]
+    times = [ans['time_taken'] for ans in answers]
+
+    fig, ax1 = plt.subplots()
+
+    color = 'tab:red'
+    ax1.set_xlabel('Question Number')
+    ax1.set_ylabel('Difficulty', color=color)
+    ax1.plot(difficulties, color=color)
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    ax2 = ax1.twinx()
+    color = 'tab:blue'
+    ax2.set_ylabel('Time Taken (s)', color=color)
+    ax2.plot(times, color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    fig.tight_layout()
+    st.pyplot(fig)
+
 # Main function to run the Streamlit app
 def main():
     st.title("Math Test!")
@@ -99,6 +141,15 @@ def main():
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
         st.write(f"Total Time: {performance['total_time']}")
+
+        # Predict future performance
+        prediction = predict_performance(st.session_state.answers)
+        if prediction is not None:
+            st.write(f"Predicted performance for next question: {prediction * 100:.1f}% chance of correct answer")
+
+        # Visualize performance
+        visualize_performance(st.session_state.answers)
+
         if st.button('Start New Quiz', key='start_new_quiz_button'):
             reset_quiz()
         return  # Stop execution after the last question
@@ -130,33 +181,7 @@ def main():
         correct = round(user_answer, 1) == question['answer']
         if correct:
             st.session_state.score += 1
-            st.session_state.feedback = "Correct!"
-        else:
-            st.session_state.feedback = f"Wrong Answer! Hint: {question['hint']} The correct answer was: {question['answer']}"
-
-        st.session_state.answers.append({
-            'question': question['question'],
-            'answer': user_answer,
-            'correct': correct,
-            'difficulty': st.session_state.current_difficulty,
-            'time_taken': time_taken
-        })
-
-        st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
-        st.session_state.question_number += 1
-
-        # Reset for the next question
-        st.session_state.current_question = None
-        st.session_state.start_time = time.time()
-        st.session_state.user_answer = ""  # Reset user answer for next question
-        st.experimental_rerun()
-
-    if st.session_state.feedback:
-        st.write(st.session_state.feedback)
-        st.session_state.feedback = None
-
-if __name__ == "__main__":
-    main()
+            st.session_state.feedback = "
 
 
 
