@@ -117,10 +117,9 @@ def generate_arithmetic_question(difficulty):
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
 # Function to evaluate performance
-def evaluate_performance(answers):
+def evaluate_performance(answers, total_time):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = sum(ans['time_taken'] for ans in answers)
     total_time = round(total_time, 1)  # Round total time to one decimal place
 
     # Convert total time to minutes and seconds
@@ -176,14 +175,14 @@ def main():
         num_questions = st.number_input('', min_value=10, max_value=20, step=1, key='num_questions_input')
         if st.button('Confirm'):
             st.session_state.num_questions = num_questions
+            st.session_state.total_start_time = time.time()  # Initialize total start time when quiz starts
             st.experimental_rerun()
         return  # Return here to wait for the user to confirm the number of questions
 
     # Check if the quiz is complete
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
-        st.session_state.answers.append({'time_taken': total_time})
-        performance = evaluate_performance(st.session_state.answers)
+        performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("Test completed!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
@@ -238,6 +237,13 @@ def main():
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # Reset second chance flag
                 st.session_state.question_number += 1
+                st.session_state.answers.append({
+                    'question': question['question'],
+                    'answer': user_answer,
+                    'correct': True,
+                    'difficulty': st.session_state.current_difficulty,
+                    'time_taken': time_taken
+                })
             else:
                 if st.session_state.second_chance:
                     st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
@@ -253,6 +259,13 @@ def main():
                     st.session_state.second_chance = False  # Reset second chance flag
                 else:
                     st.session_state.feedback = "Wrong Answer! Try another question of the same difficulty."
+                    st.session_state.answers.append({
+                        'question': question['question'],
+                        'answer': user_answer,
+                        'correct': False,
+                        'difficulty': st.session_state.current_difficulty,
+                        'time_taken': time_taken
+                    })
                     st.session_state.question_number += 1  # Increment the question number for the second attempt
                     st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
