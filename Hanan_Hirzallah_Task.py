@@ -18,7 +18,7 @@ st.markdown("""
         cursor: pointer;
         width: 140px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
-        margin-top: 20px;  /* Add margin to the top of the button */
+        margin-top: 5px;  /* Add margin to the top of the button */
     }
     .stButton>button:hover {
         background-color: #0056b3;
@@ -47,7 +47,7 @@ st.markdown("""
     }
     .blue-text {
         color: #007BFF;
-        margin-bottom: 20px;  /* Ensure some space at the bottom of the text */
+        margin-bottom: 10px;  /* Ensure some space at the bottom of the text */
     }
     .blue-label {
         color: #007BFF;
