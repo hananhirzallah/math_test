@@ -40,6 +40,9 @@ st.markdown("""
     .stMarkdown p {
         font-size: 16px;
     }
+    .blue-text {
+        color: #007BFF;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -126,7 +129,8 @@ def main():
 
     # Request number of questions if not already set
     if st.session_state.num_questions is None:
-        num_questions = st.number_input('Enter the number of questions (10-20):', min_value=10, max_value=20, step=1)
+        st.markdown('<p class="blue-text">Choose number of questions (10-20):</p>', unsafe_allow_html=True)
+        num_questions = st.number_input('', min_value=10, max_value=20, step=1)
         if st.button('Confirm'):
             st.session_state.num_questions = num_questions
             st.experimental_rerun()
@@ -206,4 +210,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
