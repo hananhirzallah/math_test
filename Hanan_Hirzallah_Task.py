@@ -110,25 +110,37 @@ def evaluate_performance(answers, total_time):
     minutes = int(total_time // 60)
     seconds = total_time % 60
 
+    difficulty_performance = {1: {"correct": 0, "total": 0},
+                              2: {"correct": 0, "total": 0},
+                              3: {"correct": 0, "total": 0},
+                              4: {"correct": 0, "total": 0}}
+
     operation_performance = {"addition": {"correct": 0, "total": 0},
                              "subtraction": {"correct": 0, "total": 0},
                              "multiplication": {"correct": 0, "total": 0},
                              "division": {"correct": 0, "total": 0}}
 
     for ans in answers:
-        if ans['operation'] == '+':
+        difficulty = ans['difficulty']
+        operation = ans['operation']
+        
+        difficulty_performance[difficulty]["total"] += 1
+        if ans['correct']:
+            difficulty_performance[difficulty]["correct"] += 1
+        
+        if operation == '+':
             operation_performance["addition"]["total"] += 1
             if ans['correct']:
                 operation_performance["addition"]["correct"] += 1
-        elif ans['operation'] == '-':
+        elif operation == '-':
             operation_performance["subtraction"]["total"] += 1
             if ans['correct']:
                 operation_performance["subtraction"]["correct"] += 1
-        elif ans['operation'] == '*':
+        elif operation == '*':
             operation_performance["multiplication"]["total"] += 1
             if ans['correct']:
                 operation_performance["multiplication"]["correct"] += 1
-        elif ans['operation'] == '/':
+        elif operation == '/':
             operation_performance["division"]["total"] += 1
             if ans['correct']:
                 operation_performance["division"]["correct"] += 1
@@ -137,6 +149,7 @@ def evaluate_performance(answers, total_time):
         "correct_answers": correct_answers,
         "average_difficulty": average_difficulty,
         "total_time": f"{minutes} minutes and {seconds:.1f} seconds",
+        "difficulty_performance": difficulty_performance,
         "operation_performance": operation_performance
     }
 
@@ -178,7 +191,6 @@ def main():
                 <br>&nbsp;&nbsp;&nbsp;1. Number of correct answers.
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
-                <br>&nbsp;&nbsp;&nbsp;4. Correct attempts out of total attempts for each operation, this way you can know in which area you excel and which areas to improve on.
                 <br>- There's also an option to restart the quiz.
                 <br><br>
                 Have fun and good luck!!
@@ -222,13 +234,18 @@ def main():
     if st.session_state.question_number >= st.session_state.num_questions:
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
-        st.write("Test completed!")
+        st.write("All Done!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
         st.write(f"Total Time: {performance['total_time']}")
         
+        # Display performance by difficulty level
+        for difficulty, data in performance['difficulty_performance'].items():
+            difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
+            st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
+
         # Display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
@@ -315,7 +332,7 @@ def main():
                         'time_taken': time_taken,
                         'operation': question['operation']
                     })
-                    st.session_state.question_number += 1  # increment the question number for the second attempt
+                    st.session_state.question_number += 1  # Increment the question number for the second attempt
                     st.session_state.current_question = question_composition(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
                     st.session_state.user_answer = ""  
@@ -337,7 +354,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
 
