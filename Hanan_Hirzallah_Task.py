@@ -6,7 +6,7 @@ import streamlit as st
 st.markdown("""
     <style>
     .main {
-        background-color: #f0f4f8;
+        background-color: #e0f7fa;
     }
     .stButton>button {
         color: #ffffff;
@@ -49,6 +49,9 @@ st.markdown("""
         font-size: 16px;
         margin-bottom: -100px;
     }
+    .hint {
+        color: #007BFF;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -66,43 +69,43 @@ def generate_arithmetic_question(difficulty):
         question = f"{a} + {b}"
         answer = a + b
         hint = (
-            f"To solve {a} + {b}:\n"
-            f"1. Write the numbers one under the other. Make sure the digits on the right are lined up.\n"
-            f"2. Start adding from the right side.\n"
-            f"3. If the sum is 10 or more, write down the right digit and put the left digit above the next column.\n"
-            f"Example: {a} + {b} = {a + b}. You can do it!"
+            f"<p class='hint'>To solve {a} + {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
+            f"<p class='hint'>2. Start adding from the right side.</p>"
+            f"<p class='hint'>3. If the sum is 10 or more, write down the right digit and put the left digit above the next column.</p>"
+            f"<p class='hint'>Example: {a} + {b} = {a + b}. You can do it!</p>"
         )
     elif operation == '-':
         question = f"{a} - {b}"
         answer = a - b
         hint = (
-            f"To solve {a} - {b}:\n"
-            f"1. Write the numbers one under the other. Make sure the digits on the right are lined up.\n"
-            f"2. Start subtracting from the right side.\n"
-            f"3. If the top number is smaller, borrow from the next column on the left.\n"
-            f"Example: {a} - {b} = {a - b}. You're doing great!"
+            f"<p class='hint'>To solve {a} - {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
+            f"<p class='hint'>2. Start subtracting from the right side.</p>"
+            f"<p class='hint'>3. If the top number is smaller, borrow from the next column on the left.</p>"
+            f"<p class='hint'>Example: {a} - {b} = {a - b}. You're doing great!</p>"
         )
     elif operation == '*':
         question = f"{a} * {b}"
         answer = a * b
         hint = (
-            f"To solve {a} * {b}:\n"
-            f"1. Write the numbers one under the other.\n"
-            f"2. Multiply the bottom number by each digit of the top number, starting from the right.\n"
-            f"3. Write each result below, shifting one place to the left each time.\n"
-            f"4. Add up all the results to get the final answer.\n"
-            f"Example: {a} * {b} = {a * b}. Keep it up!"
+            f"<p class='hint'>To solve {a} * {b}:</p>"
+            f"<p class='hint'>1. Write the numbers one under the other.</p>"
+            f"<p class='hint'>2. Multiply the bottom number by each digit of the top number, starting from the right.</p>"
+            f"<p class='hint'>3. Write each result below, shifting one place to the left each time.</p>"
+            f"<p class='hint'>4. Add up all the results to get the final answer.</p>"
+            f"<p class='hint'>Example: {a} * {b} = {a * b}. Keep it up!</p>"
         )
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
         hint = (
-            f"To solve {a} / {b}:\n"
-            f"1. See how many times {b} fits into {a}.\n"
-            f"2. Write down the answer above the division line.\n"
-            f"3. If there's any left over, that's the remainder.\n"
-            f"4. Continue dividing to get a decimal if needed, and round to one decimal place.\n"
-            f"Example: {a} / {b} ≈ {round(a / b, 1)}. Awesome job!"
+            f"<p class='hint'>To solve {a} / {b}:</p>"
+            f"<p class='hint'>1. See how many times {b} fits into {a}.</p>"
+            f"<p class='hint'>2. Write down the answer above the division line.</p>"
+            f"<p class='hint'>3. If there's any left over, that's the remainder.</p>"
+            f"<p class='hint'>4. Continue dividing to get a decimal if needed, and round to one decimal place.</p>"
+            f"<p class='hint'>Example: {a} / {b} ≈ {round(a / b, 1)}. Awesome job!</p>"
         )
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
@@ -197,7 +200,7 @@ def main():
         st.session_state.show_hint = True
 
     if st.session_state.show_hint:
-        st.write(f"Hint: {question['hint']}")
+        st.markdown(question['hint'], unsafe_allow_html=True)
 
     if st.button('Submit', key='submit_button'):
         if st.session_state.question_number >= st.session_state.num_questions:
@@ -243,6 +246,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
