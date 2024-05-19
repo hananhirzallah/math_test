@@ -2,7 +2,7 @@ import random
 import time
 import streamlit as st
 
-# Set the color styles using Streamlit's markdown feature with HTML and CSS
+# for the colors
 def styles():
     st.markdown("""
         <style>
@@ -104,9 +104,9 @@ def question_composition(difficulty):
 def evaluate_performance(answers, total_time):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = round(total_time, 1)  # Round total time to one decimal place
+    total_time = round(total_time, 1)  
 
-    # Convert total time to minutes and seconds
+    # convert total time to minutes and seconds
     minutes = int(total_time // 60)
     seconds = total_time % 60
 
@@ -200,7 +200,7 @@ def main():
         st.write("## Performance Summary")
         st.write(f"Correct Answers: {performance['correct_answers']}")
         st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
-        st.write(f"Total Time: {performance['total_time']}")
+        st.write(f"Time Taken: {performance['total_time']}")
         if st.button('Start New Quiz', key='start_new_quiz_button'):
             reset_quiz()
         return  # concludes upon completion
@@ -217,7 +217,7 @@ def main():
     difficulty_label = difficulty_map[question['difficulty']]
 
     # Display difficulty level above the question
-    st.markdown(f"<p class='blue-text'>Difficulty: {difficulty_label}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='blue-text'>Difficulty Level: {difficulty_label}</p>", unsafe_allow_html=True)
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
     st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
@@ -247,7 +247,7 @@ def main():
             correct = round(user_answer, 1) == question['answer']
             if correct:
                 st.session_state.score += 1
-                st.session_state.feedback = "Correct!"
+                st.session_state.feedback = "Good Job!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # for the second attempt
                 st.session_state.question_number += 1
@@ -260,7 +260,7 @@ def main():
                 })
             else:
                 if st.session_state.second_chance:
-                    st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
+                    st.session_state.feedback = f"Hard Luck! The correct answer was: {question['answer']}"
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
@@ -272,7 +272,7 @@ def main():
                     st.session_state.question_number += 1
                     st.session_state.second_chance = False  # reset second chance flag
                 else:
-                    st.session_state.feedback = "Wrong Answer! Try another question of the same difficulty."
+                    st.session_state.feedback = "Wrong Answer! Try another question."
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
