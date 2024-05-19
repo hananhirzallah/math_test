@@ -229,6 +229,15 @@ def main():
                 return
 
             correct = round(user_answer, 1) == question['answer']
+            st.session_state.answers.append({
+                'question': question['question'],
+                'answer': user_answer,
+                'correct': correct,
+                'difficulty': st.session_state.current_difficulty,
+                'time_taken': time_taken
+            })
+            st.session_state.user_answer = ""  # Reset user answer for next question
+
             if correct:
                 st.session_state.score += 1
                 st.session_state.feedback = "Correct!"
@@ -238,13 +247,6 @@ def main():
             else:
                 if st.session_state.second_chance:
                     st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
-                    st.session_state.answers.append({
-                        'question': question['question'],
-                        'answer': user_answer,
-                        'correct': False,
-                        'difficulty': st.session_state.current_difficulty,
-                        'time_taken': time_taken
-                    })
                     st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                     st.session_state.question_number += 1
                     st.session_state.second_chance = False  # Reset second chance flag
@@ -252,14 +254,12 @@ def main():
                     st.session_state.feedback = "Wrong Answer! Try another question of the same difficulty."
                     st.session_state.current_question = generate_arithmetic_question(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
-                    st.session_state.user_answer = ""  # Reset user answer for the new question
                     st.session_state.second_chance = True
                     st.experimental_rerun()
                     return
 
             # Reset for the next question
             st.session_state.current_question = None
-            st.session_state.user_answer = ""  # Reset user answer for next question
             st.experimental_rerun()
 
     if st.session_state.show_hint:
