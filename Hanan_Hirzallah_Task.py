@@ -18,7 +18,7 @@ st.markdown("""
         cursor: pointer;
         width: 140px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
-        margin-top: 5px;  /* Add margin to the top of the button */
+        margin-top: 20px;  /* Add margin to the top of the button */
     }
     .stButton>button:hover {
         background-color: #0056b3;
@@ -47,7 +47,7 @@ st.markdown("""
     }
     .blue-text {
         color: #007BFF;
-        margin-bottom: 10px;  /* Ensure some space at the bottom of the text */
+        margin-bottom: 20px;  /* Ensure some space at the bottom of the text */
     }
     .blue-label {
         color: #007BFF;
@@ -68,10 +68,12 @@ st.markdown("""
 def generate_arithmetic_question(difficulty):
     if difficulty == 1:  # easy
         a, b = random.randint(1, 10), random.randint(1, 10)
-    elif difficulty == 2:  # medium
+    elif difficulty == 2:  # intermediate
         a, b = random.randint(10, 100), random.randint(10, 100)
-    else:  # hard
-        a, b = random.randint(100, 1000), random.randint(100, 1000)
+    elif difficulty == 3:  # hard
+        a, b = random.randint(100, 500), random.randint(100, 500)
+    else:  # advanced
+        a, b = random.randint(500, 1000), random.randint(500, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -136,7 +138,7 @@ def evaluate_performance(answers, total_time):
 # Function to adjust difficulty based on correctness of the previous answer
 def adjust_difficulty(current_difficulty, correct):
     if correct:
-        return min(3, current_difficulty + 1)  # Increase difficulty if correct
+        return min(4, current_difficulty + 1)  # Increase difficulty if correct
     else:
         return max(1, current_difficulty - 1)  # Decrease difficulty if incorrect
 
@@ -168,7 +170,7 @@ def main():
                 <br>- Firstly, The quiz will ask you to choose the number of questions you want, it has to be within the range (10-20).
                 <br>- Once you select and confirm, the quiz begins.
                 <br>- Each question has a hint, where the way to solve the question is displayed. Just press "Show Hint".
-                <br>- The quiz is divided into 3 difficulty levels: Easy, Medium, and Hard.
+                <br>- The quiz is divided into 4 difficulty levels: Easy, Intermediate, Hard, and Advanced.
                 <br>- If you solve the question correctly, you get upgraded to the next level!
                 <br>- However, if you answer it incorrectly, you have a second attempt at a similar question.
                 <br>- If you answer your second attempt correctly, you get upgraded to the next level
@@ -238,7 +240,7 @@ def main():
 
     question = st.session_state.current_question
 
-    difficulty_map = {1: "Easy", 2: "Medium", 3: "Hard"}
+    difficulty_map = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}
     difficulty_label = difficulty_map[question['difficulty']]
 
     st.write(f"Question {st.session_state.question_number + 1} (Difficulty: {difficulty_label}): {question['question']} (Round your answer to one decimal place if necessary)")
