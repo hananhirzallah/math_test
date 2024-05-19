@@ -16,7 +16,7 @@ st.markdown("""
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        width: 100px;  /* Adjusted width */
+        width: 120px;  /* Adjusted width */
         height: 40px;  /* Adjusted height */
     }
     .stButton>button:hover {
@@ -27,7 +27,7 @@ st.markdown("""
         border-radius: 5px;
         padding: 10px;
         font-size: 16px;
-        color: #000000;  /* Black text color */
+        color: ##007BFF;  /* Black text color */
         background-color: #ffffff;  /* White background color */
     }
     .stNumberInput>div>div>input {
