@@ -2,11 +2,16 @@ import random
 import time
 import streamlit as st
 import numpy as np
-from transformers import pipeline
 from sklearn.linear_model import LinearRegression
 
-# Initialize NLP model
-nlp = pipeline("text-generation", model="distilgpt2")
+# Try to import transformers and initialize the pipeline
+try:
+    from transformers import pipeline
+    nlp = pipeline("text-generation", model="distilgpt2")
+    transformers_available = True
+except Exception as e:
+    st.error(f"Error initializing transformers pipeline: {e}")
+    transformers_available = False
 
 # Function to generate arithmetic questions with specific hints
 def generate_arithmetic_question(difficulty):
@@ -39,9 +44,12 @@ def generate_arithmetic_question(difficulty):
 
 # Function to generate feedback using NLP
 def generate_feedback(question, user_answer, correct_answer):
-    feedback_prompt = f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Explain why."
-    feedback = nlp(feedback_prompt, max_length=50, num_return_sequences=1)[0]['generated_text']
-    return feedback
+    if transformers_available:
+        feedback_prompt = f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Explain why."
+        feedback = nlp(feedback_prompt, max_length=50, num_return_sequences=1)[0]['generated_text']
+        return feedback
+    else:
+        return f"The question was: {question}. You answered: {user_answer}. The correct answer is: {correct_answer}. Please install transformers library for detailed feedback."
 
 # Function to evaluate performance
 def evaluate_performance(answers):
@@ -184,8 +192,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
 
 
