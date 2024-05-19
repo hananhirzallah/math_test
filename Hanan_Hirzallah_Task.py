@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 # Try to import transformers and initialize the pipeline
 try:
     from transformers import pipeline
-    nlp = pipeline("text-generation", model="distilgpt2")
+    nlp = pipeline("text-generation", model="distilgpt2", framework="tf")
     transformers_available = True
 except Exception as e:
     st.error(f"Error initializing transformers pipeline: {e}")
@@ -20,7 +20,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(1000, 1000)
+        a, b = random.randint(100, 1000), random.randint(100, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
@@ -38,7 +38,7 @@ def generate_arithmetic_question(difficulty):
     else:
         question = f"{a} / {b}"
         answer = round(a / b, 1) if b != 0 else None  # Avoid division by zero and round to 1 decimal place
-        hint = f"Think about dividing {a} by {b}. Remember to round to one decimal place if necessary."
+        hint = f"Think about dividing {a} by {b}."
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
 
@@ -55,8 +55,7 @@ def generate_feedback(question, user_answer, correct_answer):
 def evaluate_performance(answers):
     correct_answers = sum(1 for ans in answers if ans['correct'])
     average_difficulty = sum(ans['difficulty'] for ans in answers) / len(answers)
-    total_time = sum(ans['time_taken'] for ans in answers)
-    total_time = round(total_time, 1)  # Round total time to one decimal place
+    total_time = round(sum(ans['time_taken'] for ans in answers), 1)
 
     # Convert total time to minutes and seconds
     minutes = int(total_time // 60)
