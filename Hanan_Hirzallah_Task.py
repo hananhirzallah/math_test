@@ -166,17 +166,14 @@ def main():
             <div class="content-container">
                 <p class="blue-text">
                 Hello! I'm Hanan Hirzallah and this is my math quiz!
-                <br><br>
                 Instructions:
                 <br>- Firstly, The quiz will ask you to choose the number of questions you want, it has to be within the range (10-20).
                 <br>- Once you select and confirm, the quiz begins.
                 <br>- Each question has a hint, where the way to solve the question is displayed. Just press "Show Hint".
                 <br>- The quiz is divided into 3 difficulty levels: Easy, Medium, and Hard.
-                <br>- If you solve the question correctly, you get upgraded to the next level!
-                <br>- However, if you answer it incorrectly, you have a second attempt at a similar question.
-                <br>- If you answer your second attempt correctly, you get upgraded to the next level
-                <br>- If not, you get downgraded to the previous level.
-                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance including:
+                <br>- If you solve the question correctly, you get upgraded to the next level! However, if you answer it incorrectly, you get a second attempt at a similar question.
+                <br>- If you answer your second attempt correctly, you get upgraded to the next level. If not, you get downgraded to the previous level.
+                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance, including:
                 <br>&nbsp;&nbsp;&nbsp;1. Number of correct answers.
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
