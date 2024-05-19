@@ -45,7 +45,7 @@ def styles():
             margin-bottom: -100px;
         }
         .hint { color: #007BFF; }
-        .underline { text-decoration: underline; }
+        .bold { font-weight: bold; }
         </style>
     """, unsafe_allow_html=True)
 
@@ -237,18 +237,18 @@ def main():
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
         st.write(f"Score: {st.session_state.score}/{st.session_state.num_questions}")
-        st.write("## Performance Summary")
-        st.write(f"Correct Answers: {performance['correct_answers']}")
-        st.write(f"Total Time: {performance['total_time']}")
-        st.write(f"Average Difficulty: {round(performance['average_difficulty'], 2)}")
+        st.write("<b>## Performance Summary</b>", unsafe_allow_html=True)
+        st.write("<b>Correct Answers:</b> " + str(performance['correct_answers']), unsafe_allow_html=True)
+        st.write("<b>Total Time:</b> " + str(performance['total_time']), unsafe_allow_html=True)
+        st.write("<b>Average Difficulty:</b> " + str(round(performance['average_difficulty'], 2)), unsafe_allow_html=True)
 
-        st.write(f"<p class='underline'>Performance by difficulty level:</p>", unsafe_allow_html=True)
+        st.write(f"<b>Performance by difficulty level:</b>", unsafe_allow_html=True)
         # display performance by difficulty level
         for difficulty, data in performance['difficulty_performance'].items():
             difficulty_label = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}[difficulty]
             st.write(f"{difficulty_label}: {data['correct']} correct out of {data['total']} attempts")
 
-        st.write(f"<p class='underline'>Performance by operation:</p>", unsafe_allow_html=True)
+        st.write(f"<b>Performance by operation:</b>", unsafe_allow_html=True)
         # display performance by operation
         for operation, data in performance['operation_performance'].items():
             st.write(f"{operation.capitalize()}: {data['correct']} correct out of {data['total']} attempts")
