@@ -9,7 +9,7 @@ def generate_arithmetic_question(difficulty):
     elif difficulty == 2:  # medium
         a, b = random.randint(10, 100), random.randint(10, 100)
     else:  # hard
-        a, b = random.randint(100, 1000), random.randint(1000, 1000)
+        a, b = random.randint(100, 1000), random.randint(100, 1000)
     
     operation = random.choice(['+', '-', '*', '/'])
     if operation == '+':
