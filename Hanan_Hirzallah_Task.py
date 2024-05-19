@@ -16,6 +16,8 @@ st.markdown("""
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
+        width: 150px;
+        height: 50px;
     }
     .stButton>button:hover {
         background-color: #0056b3;
@@ -73,7 +75,7 @@ def generate_arithmetic_question(difficulty):
             f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
             f"<p class='hint'>2. Start adding from the right side.</p>"
             f"<p class='hint'>3. If the sum is 10 or more, write down the right digit and put the left digit above the next column.</p>"
-            f"<p class='hint'>Example: {a} + {b} = {a + b}. You can do it!</p>"
+            f"<p class='hint'>4. Add the next column, including any number carried over.</p>"
         )
     elif operation == '-':
         question = f"{a} - {b}"
@@ -83,7 +85,7 @@ def generate_arithmetic_question(difficulty):
             f"<p class='hint'>1. Write the numbers one under the other. Make sure the digits on the right are lined up.</p>"
             f"<p class='hint'>2. Start subtracting from the right side.</p>"
             f"<p class='hint'>3. If the top number is smaller, borrow from the next column on the left.</p>"
-            f"<p class='hint'>Example: {a} - {b} = {a - b}. You're doing great!</p>"
+            f"<p class='hint'>4. Subtract the next column, including any number borrowed.</p>"
         )
     elif operation == '*':
         question = f"{a} * {b}"
@@ -94,7 +96,6 @@ def generate_arithmetic_question(difficulty):
             f"<p class='hint'>2. Multiply the bottom number by each digit of the top number, starting from the right.</p>"
             f"<p class='hint'>3. Write each result below, shifting one place to the left each time.</p>"
             f"<p class='hint'>4. Add up all the results to get the final answer.</p>"
-            f"<p class='hint'>Example: {a} * {b} = {a * b}. Keep it up!</p>"
         )
     else:
         question = f"{a} / {b}"
@@ -105,7 +106,6 @@ def generate_arithmetic_question(difficulty):
             f"<p class='hint'>2. Write down the answer above the division line.</p>"
             f"<p class='hint'>3. If there's any left over, that's the remainder.</p>"
             f"<p class='hint'>4. Continue dividing to get a decimal if needed, and round to one decimal place.</p>"
-            f"<p class='hint'>Example: {a} / {b} ≈ {round(a / b, 1)}. Awesome job!</p>"
         )
     
     return {"question": question, "answer": answer, "difficulty": difficulty, "hint": hint}
@@ -191,54 +191,61 @@ def main():
         st.session_state.show_hint = False  # Reset hint visibility for new question
 
     question = st.session_state.current_question
-    st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
+
+    difficulty_map = {1: "easy", 2: "medium", 3: "hard"}
+    difficulty_label = difficulty_map[question['difficulty']]
+
+    st.write(f"Question {st.session_state.question_number + 1} ({difficulty_label}): {question['question']} (Round your answer to one decimal place if necessary)")
 
     st.markdown('<p class="blue-label">Your answer:</p>', unsafe_allow_html=True)
     user_answer = st.text_input('', value=st.session_state.user_answer, key=f'user_answer_input_{st.session_state.question_number}')
 
-    if st.button('Show Hint'):
-        st.session_state.show_hint = True
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button('Show Hint'):
+            st.session_state.show_hint = True
+
+    with col2:
+        if st.button('Submit', key='submit_button'):
+            if st.session_state.question_number >= st.session_state.num_questions:
+                return  # Stop if quiz is complete
+
+            end_time = time.time()
+            time_taken = end_time - st.session_state.start_time
+
+            try:
+                user_answer = float(user_answer)
+            except ValueError:
+                st.session_state.feedback = "Please enter a valid number."
+                st.experimental_rerun()
+                return
+
+            correct = round(user_answer, 1) == question['answer']
+            if correct:
+                st.session_state.score += 1
+                st.session_state.feedback = "Correct!"
+            else:
+                st.session_state.feedback = f"Wrong Answer! The correct answer was: {question['answer']}"
+
+            st.session_state.answers.append({
+                'question': question['question'],
+                'answer': user_answer,
+                'correct': correct,
+                'difficulty': st.session_state.current_difficulty,
+                'time_taken': time_taken
+            })
+
+            st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
+            st.session_state.question_number += 1
+
+            # Reset for the next question
+            st.session_state.current_question = None
+            st.session_state.start_time = time.time()
+            st.session_state.user_answer = ""  # Reset user answer for next question
+            st.experimental_rerun()
 
     if st.session_state.show_hint:
         st.markdown(question['hint'], unsafe_allow_html=True)
-
-    if st.button('Submit', key='submit_button'):
-        if st.session_state.question_number >= st.session_state.num_questions:
-            return  # Stop if quiz is complete
-
-        end_time = time.time()
-        time_taken = end_time - st.session_state.start_time
-
-        try:
-            user_answer = float(user_answer)
-        except ValueError:
-            st.session_state.feedback = "Please enter a valid number."
-            st.experimental_rerun()
-            return
-
-        correct = round(user_answer, 1) == question['answer']
-        if correct:
-            st.session_state.score += 1
-            st.session_state.feedback = "Correct!"
-        else:
-            st.session_state.feedback = f"Wrong Answer! The correct answer was: {question['answer']}"
-
-        st.session_state.answers.append({
-            'question': question['question'],
-            'answer': user_answer,
-            'correct': correct,
-            'difficulty': st.session_state.current_difficulty,
-            'time_taken': time_taken
-        })
-
-        st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
-        st.session_state.question_number += 1
-
-        # Reset for the next question
-        st.session_state.current_question = None
-        st.session_state.start_time = time.time()
-        st.session_state.user_answer = ""  # Reset user answer for next question
-        st.experimental_rerun()
 
     if st.session_state.feedback:
         st.write(st.session_state.feedback)
