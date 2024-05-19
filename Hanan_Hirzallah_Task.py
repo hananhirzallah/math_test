@@ -42,6 +42,7 @@ st.markdown("""
     }
     .blue-text {
         color: #007BFF;
+        margin-bottom: -50px;
     }
     .blue-label {
         color: #007BFF;
