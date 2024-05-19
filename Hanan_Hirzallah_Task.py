@@ -279,7 +279,7 @@ def main():
             correct = round(user_answer, 1) == question['answer']
             if correct:
                 st.session_state.score += 1
-                st.session_state.feedback = "Correct!"
+                st.session_state.feedback = "Good Job!"
                 st.session_state.current_difficulty = adjust_difficulty(st.session_state.current_difficulty, correct)
                 st.session_state.second_chance = False  # for the second attempt
                 st.session_state.question_number += 1
@@ -293,7 +293,7 @@ def main():
                 })
             else:
                 if st.session_state.second_chance:
-                    st.session_state.feedback = f"Wrong Answer again! The correct answer was: {question['answer']}"
+                    st.session_state.feedback = f"Hard Luck! The correct answer was: {question['answer']}"
                     st.session_state.answers.append({
                         'question': question['question'],
                         'answer': user_answer,
@@ -315,7 +315,7 @@ def main():
                         'time_taken': time_taken,
                         'operation': question['operation']
                     })
-                    st.session_state.question_number += 1  # Increment the question number for the second attempt
+                    st.session_state.question_number += 1  # increment the question number for the second attempt
                     st.session_state.current_question = question_composition(st.session_state.current_difficulty)
                     st.session_state.start_time = time.time()
                     st.session_state.user_answer = ""  
