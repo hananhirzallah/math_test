@@ -242,6 +242,7 @@ def main():
         total_time = time.time() - st.session_state.total_start_time
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
+        st.markdown(f"**Score:** {st.session_state.score}/{st.session_state.num_questions}")
         st.markdown("<div class='summary-title'>Performance Summary</div>", unsafe_allow_html=True)
         st.markdown(f"**Correct Answers:** {performance['correct_answers']}")
         st.markdown(f"**Total Time:** {performance['total_time']}")
