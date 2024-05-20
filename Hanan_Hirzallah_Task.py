@@ -2,7 +2,7 @@ import random
 import time
 import streamlit as st
 
-# Set the color styles using Streamlit's markdown feature with HTML and CSS
+# for the colors
 def styles():
     st.markdown("""
         <style>
@@ -245,7 +245,6 @@ def main():
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
         st.markdown(f"**Score:** {st.session_state.score}/{st.session_state.num_questions}")
-        # st.markdown("<div class='summary-title'>Performance Summary</div>", unsafe_allow_html=True)
         st.write("## Performance Summary")
         st.markdown(f"**Correct Answers:** {performance['correct_answers']}")
         st.markdown(f"**Total Time:** {performance['total_time']}")
@@ -277,7 +276,6 @@ def main():
     difficulty_map = {1: "Easy", 2: "Intermediate", 3: "Hard", 4: "Advanced"}
     difficulty_label = difficulty_map[question['difficulty']]
 
-    # Display difficulty level above the question
     st.markdown(f"<p class='blue-text'>Difficulty: {difficulty_label}</p>", unsafe_allow_html=True)
     st.write(f"Question {st.session_state.question_number + 1}: {question['question']} (Round your answer to one decimal place if necessary)")
 
