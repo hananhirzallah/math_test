@@ -192,9 +192,9 @@ def main():
                 <br>- The quiz is divided into 4 difficulty levels: Easy, Intermediate, Hard, and Advanced.
                 <br>- If you solve the question correctly, you get upgraded to the next level!
                 <br>- However, if you answer it incorrectly, you have a second attempt at a similar question.
-                <br>- If you answer your second attempt correctly, you get upgraded to the next level
+                <br>- If you answer your second attempt correctly, you get upgraded to the next level.
                 <br>- If not, you get downgraded to the previous level.
-                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance including:
+                <br>- After the quiz is over, your score is displayed. As well as a summary of your performance, including:
                 <br>&nbsp;&nbsp;&nbsp;1. Number of correct answers.
                 <br>&nbsp;&nbsp;&nbsp;2. Average level.
                 <br>&nbsp;&nbsp;&nbsp;3. Time taken to finish the quiz.
@@ -245,7 +245,8 @@ def main():
         performance = evaluate_performance(st.session_state.answers, total_time)
         st.write("All done!")
         st.markdown(f"**Score:** {st.session_state.score}/{st.session_state.num_questions}")
-        st.markdown("<div class='summary-title'>Performance Summary</div>", unsafe_allow_html=True)
+        # st.markdown("<div class='summary-title'>Performance Summary</div>", unsafe_allow_html=True)
+        st.write("## Performance Summary")
         st.markdown(f"**Correct Answers:** {performance['correct_answers']}")
         st.markdown(f"**Total Time:** {performance['total_time']}")
         st.markdown(f"**Average Difficulty:** {round(performance['average_difficulty'], 2)}")
